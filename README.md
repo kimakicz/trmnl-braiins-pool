@@ -3,8 +3,9 @@
 Private plugin pro [TRMNL](https://trmnl.com) (laděno na **TRMNL X**). Zobrazuje stav mineru
 těžícího na [Braiins Pool](https://pool.braiins.com). Data bere z webového API poolu, ne z lokálního API mineru.
 
-- **Hashrate**: aktuální hodnota (5 min) a 24h průměr v TH/s, plus stav workerů (Online / Offline / Nízký výkon)
-- **Výplaty**: zůstatek k výplatě, dnešní odměna a poslední výplata (částka, datum, stav). Částky jsou v sats.
+- **Dnes vytěženo** a **poslední výplata** (částka, datum, stav) jako hlavní čísla. Částky jsou v sats.
+- **Posledních 5 výplat**: tabulka s pruhy podle výše částky.
+- **Hashrate**: 24h průměr v TH/s a stav workerů (Online / Offline / Nízký výkon).
 
 Layouty: `full`, `half_horizontal`, `half_vertical`, `quadrant` (mashupy).
 
@@ -86,6 +87,12 @@ src/
 fixtures/               # vzorová data + scénáře
 bin/                    # serve / shot / scenario
 ```
+
+## Logo
+
+Symbol Braiins je z [design.braiins.com](https://design.braiins.com/braiins/logos/braiins-symbol).
+Černá varianta je v `assets/braiins-symbol-black.svg` a v šabloně je vložená inline jako data URI (`shared.liquid`).
+Logo je ochranná známka Braiins, plugin s Braiins nijak nesouvisí.
 
 ## Omezení
 

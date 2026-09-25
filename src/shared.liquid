@@ -71,6 +71,24 @@
     {%- else -%}{%- assign lp_status = last_payout.status | default: "?" -%}
   {%- endcase -%}
 {%- endif -%}
+
+{%- comment -%} Posledních 5 výplat (nejnovější první) + maximum pro délku pruhů {%- endcomment -%}
+{%- assign recent = payouts | reverse -%}
+{%- assign recent_max = 1 -%}
+{%- for x in recent limit: 5 -%}
+  {%- if x.amount_sats > recent_max -%}{%- assign recent_max = x.amount_sats -%}{%- endif -%}
+{%- endfor -%}
+
+{%- comment -%} Braiins symbol (design.braiins.com/braiins/logos/braiins-symbol), černá varianta {%- endcomment -%}
+{%- capture braiins_logo -%}data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 864 864'%3E%3Cpolygon points='345.6 864 345.6 682.76 194.4 179.9 194.4 0 0 0 0 179.9 151.2 682.76 151.2 864 345.6 864'/%3E%3Cpolygon points='864 864 864 682.76 712.8 179.9 712.8 0 518.4 0 518.4 179.9 669.6 682.76 669.6 864 864 864'/%3E%3C/svg%3E{%- endcapture -%}
 {%- assign instance = trmnl.plugin_settings.instance_name | default: "Braiins Pool" -%}
 {%- comment -%} Čísla se nesmí zalomit uprostřed (oddělovač tisíců je mezera) {%- endcomment -%}
-<style>.bp-nw { white-space: nowrap; }</style>
+<style>
+  .bp-nw { white-space: nowrap; }
+  .bp-bar { height: 0.45em; background: #000; border-radius: 1em; }
+  .bp-table td, .bp-table th { vertical-align: middle; }
+  .bp-top { align-items: start; }
+  .bp-num { text-align: right; }
+  .bp-barcol { width: 45%; }
+  .bp-barcell { padding-left: 12px; padding-right: 20px; }
+</style>

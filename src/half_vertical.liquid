@@ -1,48 +1,50 @@
-<div class="layout layout--col layout--stretch-x gap--large">
-  <div class="flex flex--col flex--left">
-    <span class="label">Hashrate · 5 min</span>
-    <div class="flex flex--row flex--bottom gap--small">
-      {% if has_profile %}<span class="value value--xxxlarge value--tnums">{{ hr_5m }}</span>{% else %}<span class="value value--large">Bez dat</span>{% endif %}
-      {% if has_profile %}<span class="value value--base">TH/s</span>{% endif %}
-    </div>
-    <span class="label label--gray">24 h: {% if has_profile %}{{ hr_24h }}{% else %}–{% endif %} TH/s</span>
+<div class="layout layout--col layout--stretch-x gap--medium">
+  <div class="flex flex--row flex--between stretch-x">
     <span class="label {% if status_bad %}label--inverted{% else %}label--outline{% endif %}">{{ status_text }}</span>
+    <span class="label label--gray bp-nw">24 h: {% if has_profile %}{{ hr_24h }} TH/s{% else %}–{% endif %}</span>
   </div>
-
-  <div class="divider"></div>
-
-  <div class="flex flex--col flex--left gap--medium">
-    <div class="item">
-      <div class="meta"></div>
-      <div class="content">
-        <span class="label">K výplatě</span>
-        <span class="value value--large value--tnums bp-nw">{% if has_profile %}{{ balance_sats }}{% else %}–{% endif %} <span class="label label--gray">sats</span></span>
+  <div class="flex flex--col flex--left">
+    <span class="label">Dnes vytěženo</span>
+    {% if has_profile %}
+      <div class="flex flex--row flex--bottom gap--small">
+        <span class="value {% if today_len <= 5 %}value--xxlarge{% else %}value--xlarge{% endif %} value--tnums bp-nw">{{ today_sats }}</span>
+        <span class="value value--small">sats</span>
       </div>
-    </div>
-    <div class="item">
-      <div class="meta"></div>
-      <div class="content">
-        <span class="label">Dnes vytěženo</span>
-        <span class="value value--large value--tnums bp-nw">{% if has_profile %}{{ today_sats }}{% else %}–{% endif %} <span class="label label--gray">sats</span></span>
-      </div>
-    </div>
-    <div class="item">
-      <div class="meta"></div>
-      <div class="content">
-        <span class="label">Poslední výplata</span>
-        {% if last_payout %}
-          <span class="value value--large value--tnums bp-nw">{{ lp_sats }} <span class="label label--gray">sats</span></span>
-          <span class="label label--gray">{{ lp_date }} · {{ lp_status }}</span>
-        {% else %}
-          <span class="value value--large">–</span>
-          <span class="label label--gray">{{ no_payout_short }}</span>
-        {% endif %}
-      </div>
-    </div>
+    {% else %}
+      <span class="value value--large">Bez dat</span>
+    {% endif %}
   </div>
+  <div class="flex flex--col flex--left">
+    <span class="label">Poslední výplata</span>
+    {% if last_payout %}
+      <div class="flex flex--row flex--bottom gap--small">
+        <span class="value {% if lp_len <= 5 %}value--xxlarge{% else %}value--xlarge{% endif %} value--tnums bp-nw">{{ lp_sats }}</span>
+        <span class="value value--small">sats</span>
+      </div>
+      <span class="label label--gray">{{ lp_date }} · {{ lp_status }}</span>
+    {% else %}
+      <span class="value value--large">–</span>
+      <span class="label label--gray">{{ no_payout_short }}</span>
+    {% endif %}
+  </div>
+  {% if recent.size > 1 %}
+  <table class="table table--condensed bp-table">
+    <tbody>
+      {% for x in recent limit: 5 %}
+        {% assign pct = x.amount_sats | times: 100 | divided_by: recent_max | at_least: 2 %}
+        <tr>
+          <td><span class="label bp-nw">{{ x.requested_at_ts | plus: trmnl.user.utc_offset | date: "%-d. %-m." }}</span></td>
+          <td class="bp-num"><span class="label value--tnums bp-nw">{{ x.amount_sats | number_with_delimiter: " ", "," }}{% if x.status == "queued" %} ⧗{% elsif x.status == "failed" %} ✕{% endif %}</span></td>
+          <td class="bp-barcol bp-barcell"><div class="bp-bar" style="width: {{ pct }}%"></div></td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
 </div>
 
 <div class="title_bar">
+  <img class="image" src="{{ braiins_logo }}" alt="Braiins">
   <span class="title">Braiins Pool</span>
   <span class="instance">{{ instance }}</span>
 </div>
