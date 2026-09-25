@@ -1,21 +1,24 @@
 ---
-name: Braiins Miner
-description: Hashrate a výplaty z Braiins Pool
 strategy: polling
+no_screen_padding: 'no'
+dark_mode: 'no'
+static_data: ''
 polling_verb: get
+framework_version: latest
+serverless_language:
+refresh_interval_floor:
 polling_url: |-
   https://pool.braiins.com/accounts/profile/json/btc/
   https://pool.braiins.com/accounts/payouts/json/btc?from={{ "now" | date: "%s" | minus: 7776000 | date: "%Y-%m-%d" }}
 polling_headers: Pool-Auth-Token={{ pool_token }}
 polling_body: ''
-static_data: ''
-refresh_interval: 15
-no_screen_padding: 'no'
-dark_mode: 'no'
-framework_version: latest
+id: 488034
 custom_fields:
 - keyname: pool_token
   field_type: password
   name: Braiins Pool API token
   description: Settings → Access Profiles → Allow access to web APIs → Generate New token
   optional: false
+name: Braiins Miner
+description: Hashrate a výplaty z Braiins Pool
+refresh_interval: 15
