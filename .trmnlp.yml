@@ -1,0 +1,8 @@
+---
+# Lokální konfigurace pro `trmnlp serve`. Token se bere z prostředí (.env), nikdy ho sem nepiš.
+watch:
+  - src
+  - .trmnlp.yml
+time_zone: Europe/Prague
+custom_fields:
+  pool_token: "{{ env.BRAIINS_POOL_TOKEN }}"

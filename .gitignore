@@ -1,0 +1,6 @@
+.env
+.env.*
+!.env.example
+fixtures/raw/
+_build/
+.DS_Store

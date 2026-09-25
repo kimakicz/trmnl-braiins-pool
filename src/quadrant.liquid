@@ -1,0 +1,29 @@
+<div class="layout layout--col layout--stretch-x gap--medium">
+  <div class="flex flex--col flex--left">
+    <div class="flex flex--row flex--bottom gap--small">
+      {% if has_profile %}<span class="value value--xxlarge value--tnums">{{ hr_5m }}</span>{% else %}<span class="value value--base">Bez dat</span>{% endif %}
+      {% if has_profile %}<span class="value value--small">TH/s</span>{% endif %}
+    </div>
+    <span class="label label--gray">5 min · 24 h: {% if has_profile %}{{ hr_24h }}{% else %}–{% endif %}{% if status_bad %} · <span class="label label--inverted">{{ status_text }}</span>{% endif %}</span>
+  </div>
+  <div class="grid grid--cols-2">
+    <div class="flex flex--col flex--left">
+      <span class="label label--small">K výplatě</span>
+      <span class="value value--small value--tnums bp-nw">{% if has_profile %}{{ balance_sats }} sats{% else %}–{% endif %}</span>
+      {% if has_profile %}<span class="label label--small label--gray">dnes +{{ today_sats }}</span>{% endif %}
+    </div>
+    <div class="flex flex--col flex--left">
+      <span class="label label--small">Poslední výplata</span>
+      {% if last_payout %}
+        <span class="value value--small value--tnums bp-nw">{{ lp_sats }} sats</span>
+        <span class="label label--small label--gray">{{ lp_date }}{% if last_payout.status != "confirmed" %} · {{ lp_status }}{% endif %}</span>
+      {% else %}
+        <span class="value value--small">–</span>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<div class="title_bar">
+  <span class="title">Braiins Pool</span>
+</div>

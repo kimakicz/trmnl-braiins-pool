@@ -1,0 +1,76 @@
+{%- comment -%}
+  Sdílená logika – trmnlp i TRMNL tento soubor vkládají před každou šablonu.
+  IDX_0 = /accounts/profile/json/btc/, IDX_1 = /accounts/payouts/json/btc
+{%- endcomment -%}
+{%- assign p = IDX_0.btc -%}
+{%- assign has_profile = false -%}
+{%- if p and p.hash_rate_5m != nil -%}{%- assign has_profile = true -%}{%- endif -%}
+
+{%- comment -%} Hashrate → TH/s podle hash_rate_unit (typicky Gh/s) {%- endcomment -%}
+{%- assign hr_unit = p.hash_rate_unit | downcase -%}
+{%- case hr_unit -%}
+  {%- when "ph/s" -%}{%- assign hr_factor = 1000 -%}
+  {%- when "th/s" -%}{%- assign hr_factor = 1 -%}
+  {%- when "mh/s" -%}{%- assign hr_factor = 0.000001 -%}
+  {%- else -%}{%- assign hr_factor = 0.001 -%}
+{%- endcase -%}
+{%- assign hr_5m = p.hash_rate_5m | default: 0 | times: hr_factor | number_to_currency: "", " ", ",", 2 -%}
+{%- assign hr_24h = p.hash_rate_24h | default: 0 | times: hr_factor | number_to_currency: "", " ", ",", 2 -%}
+
+{%- comment -%} BTC stringy → sats {%- endcomment -%}
+{%- assign balance_raw = p.current_balance | default: 0 | times: 100000000 | round -%}
+{%- assign balance_sats = balance_raw | number_with_delimiter: " ", "," -%}
+{%- assign today_sats = p.today_reward | default: 0 | times: 100000000 | round | number_with_delimiter: " ", "," -%}
+
+{%- comment -%} Velikost písma podle délky čísla (počet znaků vč. mezer), ať se vejde do sloupce {%- endcomment -%}
+{%- assign bal_len = balance_sats | size -%}
+{%- assign today_len = today_sats | size -%}
+
+{%- comment -%} Stav workerů {%- endcomment -%}
+{%- assign w_ok = p.ok_workers | default: 0 -%}
+{%- assign w_low = p.low_workers | default: 0 -%}
+{%- assign w_off = p.off_workers | default: 0 -%}
+{%- assign w_alive = w_ok | plus: w_low -%}
+{%- if has_profile == false -%}
+  {%- assign status_text = "API nedostupné" -%}{%- assign status_bad = true -%}
+{%- elsif w_off > 0 and w_alive == 0 -%}
+  {%- assign status_text = "Offline" -%}{%- assign status_bad = true -%}
+{%- elsif w_off > 0 -%}
+  {%- assign status_text = w_off | append: " offline" -%}{%- assign status_bad = true -%}
+{%- elsif w_low > 0 -%}
+  {%- assign status_text = "Nízký výkon" -%}{%- assign status_bad = true -%}
+{%- elsif w_ok > 0 -%}
+  {%- assign status_text = "Online" -%}{%- assign status_bad = false -%}
+{%- else -%}
+  {%- assign status_text = "Žádný worker" -%}{%- assign status_bad = true -%}
+{%- endif -%}
+
+{%- comment -%}
+  Poslední výplata: lightning + onchain, seřadit podle requested_at_ts (int), vzít poslední.
+  API vrací položky vzestupně (nejstarší první), takže `last` sedí i bez sort.
+{%- endcomment -%}
+{%- assign empty_list = "" | split: "," -%}
+{%- if IDX_1.lightning == nil and IDX_1.onchain == nil -%}
+  {%- assign no_payout_text = "Bez dat" -%}{%- assign no_payout_short = "Bez dat" -%}
+{%- else -%}
+  {%- assign no_payout_text = "Žádná za posledních 90 dní" -%}{%- assign no_payout_short = "Žádná za 90 dní" -%}
+{%- endif -%}
+{%- assign pay_ln = IDX_1.lightning | default: empty_list -%}
+{%- assign pay_oc = IDX_1.onchain | default: empty_list -%}
+{%- assign payouts = pay_ln | concat: pay_oc | sort: "requested_at_ts" -%}
+{%- assign last_payout = payouts | last -%}
+{%- if last_payout -%}
+  {%- assign lp_raw = last_payout.amount_sats | default: 0 -%}
+  {%- assign lp_sats = lp_raw | number_with_delimiter: " ", "," -%}
+  {%- assign lp_len = lp_sats | size -%}
+  {%- assign lp_date = last_payout.requested_at_ts | plus: trmnl.user.utc_offset | date: "%-d. %-m. %Y" -%}
+  {%- case last_payout.status -%}
+    {%- when "confirmed" -%}{%- assign lp_status = "Potvrzena" -%}
+    {%- when "queued" -%}{%- assign lp_status = "Ve frontě" -%}
+    {%- when "failed" -%}{%- assign lp_status = "Selhala" -%}
+    {%- else -%}{%- assign lp_status = last_payout.status | default: "?" -%}
+  {%- endcase -%}
+{%- endif -%}
+{%- assign instance = trmnl.plugin_settings.instance_name | default: "Braiins Pool" -%}
+{%- comment -%} Čísla se nesmí zalomit uprostřed (oddělovač tisíců je mezera) {%- endcomment -%}
+<style>.bp-nw { white-space: nowrap; }</style>

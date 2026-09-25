@@ -1,0 +1,28 @@
+{
+  "IDX_0": {
+    "username": "demo",
+    "btc": {
+      "all_time_reward": "0.00016076",
+      "hash_rate_unit": "Gh/s",
+      "hash_rate_5m": 12.3,
+      "hash_rate_60m": 1077.52139522048,
+      "hash_rate_24h": 450.0,
+      "hash_rate_yesterday": 1150.8221704055466,
+      "low_workers": 1,
+      "off_workers": 0,
+      "ok_workers": 0,
+      "dis_workers": 0,
+      "current_balance": "0.00000000",
+      "today_reward": "0.00000044",
+      "estimated_reward": "0.00000053",
+      "shares_5m": 63488,
+      "shares_60m": 903168,
+      "shares_24h": 22905856,
+      "shares_yesterday": 23150592
+    }
+  },
+  "IDX_1": {
+    "onchain": [],
+    "lightning": []
+  }
+}

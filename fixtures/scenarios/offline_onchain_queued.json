@@ -1,0 +1,798 @@
+{
+  "IDX_0": {
+    "username": "demo",
+    "btc": {
+      "all_time_reward": "0.00016076",
+      "hash_rate_unit": "Gh/s",
+      "hash_rate_5m": 0,
+      "hash_rate_60m": 1077.52139522048,
+      "hash_rate_24h": 312.5,
+      "hash_rate_yesterday": 1150.8221704055466,
+      "low_workers": 0,
+      "off_workers": 1,
+      "ok_workers": 0,
+      "dis_workers": 0,
+      "current_balance": "0.00012345",
+      "today_reward": "0.00000000",
+      "estimated_reward": "0.00000053",
+      "shares_5m": 63488,
+      "shares_60m": 903168,
+      "shares_24h": 22905856,
+      "shares_yesterday": 23150592
+    }
+  },
+  "IDX_1": {
+    "onchain": [
+      {
+        "financial_account_name": "Bitcoin Account",
+        "requested_at_ts": 1790413659,
+        "resolved_at_ts": null,
+        "status": "queued",
+        "amount_sats": 1234567,
+        "fee_sats": 1200,
+        "destination": "bc1qexample"
+      },
+      {
+        "financial_account_name": "Bitcoin Account",
+        "requested_at_ts": 1700000000,
+        "resolved_at_ts": 1700003600,
+        "status": "confirmed",
+        "amount_sats": 99,
+        "fee_sats": 0,
+        "destination": "bc1qexample"
+      }
+    ],
+    "lightning": [
+      {
+        "financial_account_name": "Bitcoin Account",
+        "requested_at_ts": 1762859207,
+        "resolved_at_ts": 1762862713,
+        "status": "confirmed",
+        "amount_sats": 46,
+        "fee_sats": 0,
+        "destination": "user@example.com",
+        "trigger_type": "manual"
+      },
+      {
+        "financial_account_name": "Bitcoin Account",
+        "requested_at_ts": 1763197566,
+        "resolved_at_ts": 1763197911,
+        "status": "confirmed",
+        "amount_sats": 160,
+        "fee_sats": 0,
+        "destination": "user@example.com",
+        "trigger_type": "triggered"
+      },
+      {
+        "financial_account_name": "Bitcoin Account",
+        "requested_at_ts": 1763715966,
+        "resolved_at_ts": 1763716356,
+        "status": "confirmed",
+        "amount_sats": 233,
+        "fee_sats": 0,
+        "destination": "user@example.com",
+        "trigger_type": "triggered"
+      },
+      {
+        "financial_account_name": "Bitcoin Account",
+        "requested_at_ts": 1764234364,
+        "resolved_at_ts": 1764234799,
+        "status": "confirmed",
+        "amount_sats": 210,
+        "fee_sats": 0,
+        "destination": "user@example.com",
+        "trigger_type": "triggered"
+      },
+      {
+        "financial_account_name": "Bitcoin Account",
+        "requested_at_ts": 1764752767,
+        "resolved_at_ts": 1764753171,
+        "status": "confirmed",
+        "amount_sats": 216,
+        "fee_sats": 0,
+        "destination": "user@example.com",
+        "trigger_type": "triggered"
+      },
+      {
+        "financial_account_name": "Bitcoin Account",
+        "requested_at_ts": 1765271165,
+        "resolved_at_ts": 1765271579,
+        "status": "confirmed",
+        "amount_sats": 213,
+        "fee_sats": 0,
+        "destination": "user@example.com",
+        "trigger_type": "triggered"
+      },
+      {
+        "financial_account_name": "Bitcoin Account",
+        "requested_at_ts": 1765789571,
+        "resolved_at_ts": 1765789950,
+        "status": "confirmed",
+        "amount_sats": 215,
+        "fee_sats": 0,
+        "destination": "user@example.com",
+        "trigger_type": "triggered"
+      },
+      {
+        "financial_account_name": "Bitcoin Account",
+        "requested_at_ts": 1766307968,
+        "resolved_at_ts": 1766308277,
+        "status": "confirmed",
+        "amount_sats": 216,
+        "fee_sats": 0,
+        "destination": "user@example.com",
+        "trigger_type": "triggered"
+      },
+      {
+        "financial_account_name": "Bitcoin Account",
+        "requested_at_ts": 1766826365,
+        "resolved_at_ts": 1766826753,
+        "status": "confirmed",
+        "amount_sats": 216,
+        "fee_sats": 0,
+        "destination": "user@example.com",
+        "trigger_type": "triggered"
+      },
+      {
+        "financial_account_name": "Bitcoin Account",
+        "requested_at_ts": 1767344767,
+        "resolved_at_ts": 1767345135,
+        "status": "confirmed",
+        "amount_sats": 216,
+        "fee_sats": 0,
+        "destination": "user@example.com",
+        "trigger_type": "triggered"
+      },
+      {
+        "financial_account_name": "Bitcoin Account",
+        "requested_at_ts": 1767776766,
+        "resolved_at_ts": 1767777236,
+        "status": "confirmed",
+        "amount_sats": 236,
+        "fee_sats": 0,
+        "destination": "user@example.com",
+        "trigger_type": "triggered"
+      },
+      {
+        "financial_account_name": "Bitcoin Account",
+        "requested_at_ts": 1768208776,
+        "resolved_at_ts": 1768209176,
+        "status": "confirmed",
+        "amount_sats": 245,
+        "fee_sats": 0,
+        "destination": "user@example.com",
+        "trigger_type": "triggered"
+      },
+      {
+        "financial_account_name": "Bitcoin Account",
+        "requested_at_ts": 1768640766,
+        "resolved_at_ts": 1768641164,
+        "status": "confirmed",
+        "amount_sats": 247,
+        "fee_sats": 0,
+        "destination": "user@example.com",
+        "trigger_type": "triggered"
+      },
+      {
+        "financial_account_name": "Bitcoin Account",
+        "requested_at_ts": 1769072762,
+        "resolved_at_ts": 1769073116,
+        "status": "confirmed",
+        "amount_sats": 246,
+        "fee_sats": 0,
+        "destination": "user@example.com",
+        "trigger_type": "triggered"
+      },
+      {
+        "financial_account_name": "Bitcoin Account",
+        "requested_at_ts": 1769418366,
+        "resolved_at_ts": 1769418752,
+        "status": "confirmed",
+        "amount_sats": 204,
+        "fee_sats": 0,
+        "destination": "user@example.com",
+        "trigger_type": "triggered"
+      },
+      {
+        "financial_account_name": "Bitcoin Account",
+        "requested_at_ts": 1769763968,
+        "resolved_at_ts": 1769764329,
+        "status": "confirmed",
+        "amount_sats": 204,
+        "fee_sats": 0,
+        "destination": "user@example.com",
+        "trigger_type": "triggered"
+      },
+      {
+        "financial_account_name": "Bitcoin Account",
+        "requested_at_ts": 1770109567,
+        "resolved_at_ts": 1770109947,
+        "status": "confirmed",
+        "amount_sats": 204,
+        "fee_sats": 0,
+        "destination": "user@example.com",
+        "trigger_type": "triggered"
+      },
+      {
+        "financial_account_name": "Bitcoin Account",
+        "requested_at_ts": 1770455166,
+        "resolved_at_ts": 1770455498,
+        "status": "confirmed",
+        "amount_sats": 202,
+        "fee_sats": 0,
+        "destination": "user@example.com",
+        "trigger_type": "triggered"
+      },
+      {
+        "financial_account_name": "Bitcoin Account",
+        "requested_at_ts": 1770800767,
+        "resolved_at_ts": 1770801076,
+        "status": "confirmed",
+        "amount_sats": 225,
+        "fee_sats": 0,
+        "destination": "user@example.com",
+        "trigger_type": "triggered"
+      },
+      {
+        "financial_account_name": "Bitcoin Account",
+        "requested_at_ts": 1771146367,
+        "resolved_at_ts": 1771146736,
+        "status": "confirmed",
+        "amount_sats": 232,
+        "fee_sats": 0,
+        "destination": "user@example.com",
+        "trigger_type": "triggered"
+      },
+      {
+        "financial_account_name": "Bitcoin Account",
+        "requested_at_ts": 1771491967,
+        "resolved_at_ts": 1771492355,
+        "status": "confirmed",
+        "amount_sats": 233,
+        "fee_sats": 0,
+        "destination": "user@example.com",
+        "trigger_type": "triggered"
+      },
+      {
+        "financial_account_name": "Bitcoin Account",
+        "requested_at_ts": 1771837567,
+        "resolved_at_ts": 1771841378,
+        "status": "confirmed",
+        "amount_sats": 209,
+        "fee_sats": 0,
+        "destination": "user@example.com",
+        "trigger_type": "triggered"
+      },
+      {
+        "financial_account_name": "Bitcoin Account",
+        "requested_at_ts": 1772183165,
+        "resolved_at_ts": 1772183532,
+        "status": "confirmed",
+        "amount_sats": 203,
+        "fee_sats": 0,
+        "destination": "user@example.com",
+        "trigger_type": "triggered"
+      },
+      {
+        "financial_account_name": "Bitcoin Account",
+        "requested_at_ts": 1772528763,
+        "resolved_at_ts": 1772529127,
+        "status": "confirmed",
+        "amount_sats": 201,
+        "fee_sats": 0,
+        "destination": "user@example.com",
+        "trigger_type": "triggered"
+      },
+      {
+        "financial_account_name": "Bitcoin Account",
+        "requested_at_ts": 1772874365,
+        "resolved_at_ts": 1772874655,
+        "status": "confirmed",
+        "amount_sats": 201,
+        "fee_sats": 0,
+        "destination": "user@example.com",
+        "trigger_type": "triggered"
+      },
+      {
+        "financial_account_name": "Bitcoin Account",
+        "requested_at_ts": 1773306366,
+        "resolved_at_ts": 1773306771,
+        "status": "confirmed",
+        "amount_sats": 249,
+        "fee_sats": 0,
+        "destination": "user@example.com",
+        "trigger_type": "triggered"
+      },
+      {
+        "financial_account_name": "Bitcoin Account",
+        "requested_at_ts": 1773651969,
+        "resolved_at_ts": 1773652358,
+        "status": "confirmed",
+        "amount_sats": 200,
+        "fee_sats": 0,
+        "destination": "user@example.com",
+        "trigger_type": "triggered"
+      },
+      {
+        "financial_account_name": "Bitcoin Account",
+        "requested_at_ts": 1773997567,
+        "resolved_at_ts": 1773997906,
+        "status": "confirmed",
+        "amount_sats": 201,
+        "fee_sats": 0,
+        "destination": "user@example.com",
+        "trigger_type": "triggered"
+      },
+      {
+        "financial_account_name": "Bitcoin Account",
+        "requested_at_ts": 1774343168,
+        "resolved_at_ts": 1774343463,
+        "status": "confirmed",
+        "amount_sats": 214,
+        "fee_sats": 0,
+        "destination": "user@example.com",
+        "trigger_type": "triggered"
+      },
+      {
+        "financial_account_name": "Bitcoin Account",
+        "requested_at_ts": 1774688764,
+        "resolved_at_ts": 1774689074,
+        "status": "confirmed",
+        "amount_sats": 216,
+        "fee_sats": 0,
+        "destination": "user@example.com",
+        "trigger_type": "triggered"
+      },
+      {
+        "financial_account_name": "Bitcoin Account",
+        "requested_at_ts": 1775034384,
+        "resolved_at_ts": 1775034720,
+        "status": "confirmed",
+        "amount_sats": 212,
+        "fee_sats": 0,
+        "destination": "user@example.com",
+        "trigger_type": "triggered"
+      },
+      {
+        "financial_account_name": "Bitcoin Account",
+        "requested_at_ts": 1775379964,
+        "resolved_at_ts": 1775384641,
+        "status": "confirmed",
+        "amount_sats": 208,
+        "fee_sats": 0,
+        "destination": "user@example.com",
+        "trigger_type": "triggered"
+      },
+      {
+        "financial_account_name": "Bitcoin Account",
+        "requested_at_ts": 1775725562,
+        "resolved_at_ts": 1775834382,
+        "status": "confirmed",
+        "amount_sats": 204,
+        "fee_sats": 0,
+        "destination": "user@example.com",
+        "trigger_type": "triggered"
+      },
+      {
+        "financial_account_name": "Bitcoin Account",
+        "requested_at_ts": 1776071166,
+        "resolved_at_ts": 1776073038,
+        "status": "confirmed",
+        "amount_sats": 203,
+        "fee_sats": 0,
+        "destination": "user@example.com",
+        "trigger_type": "triggered"
+      },
+      {
+        "financial_account_name": "Bitcoin Account",
+        "requested_at_ts": 1776416765,
+        "resolved_at_ts": 1776421556,
+        "status": "confirmed",
+        "amount_sats": 204,
+        "fee_sats": 0,
+        "destination": "user@example.com",
+        "trigger_type": "triggered"
+      },
+      {
+        "financial_account_name": "Bitcoin Account",
+        "requested_at_ts": 1776762361,
+        "resolved_at_ts": 1776766423,
+        "status": "confirmed",
+        "amount_sats": 208,
+        "fee_sats": 0,
+        "destination": "user@example.com",
+        "trigger_type": "triggered"
+      },
+      {
+        "financial_account_name": "Bitcoin Account",
+        "requested_at_ts": 1777107966,
+        "resolved_at_ts": 1777109380,
+        "status": "confirmed",
+        "amount_sats": 209,
+        "fee_sats": 0,
+        "destination": "user@example.com",
+        "trigger_type": "triggered"
+      },
+      {
+        "financial_account_name": "Bitcoin Account",
+        "requested_at_ts": 1777453563,
+        "resolved_at_ts": 1777453910,
+        "status": "confirmed",
+        "amount_sats": 207,
+        "fee_sats": 0,
+        "destination": "user@example.com",
+        "trigger_type": "triggered"
+      },
+      {
+        "financial_account_name": "Bitcoin Account",
+        "requested_at_ts": 1777799164,
+        "resolved_at_ts": 1777799508,
+        "status": "confirmed",
+        "amount_sats": 210,
+        "fee_sats": 0,
+        "destination": "user@example.com",
+        "trigger_type": "triggered"
+      },
+      {
+        "financial_account_name": "Bitcoin Account",
+        "requested_at_ts": 1778144763,
+        "resolved_at_ts": 1778145113,
+        "status": "confirmed",
+        "amount_sats": 212,
+        "fee_sats": 0,
+        "destination": "user@example.com",
+        "trigger_type": "triggered"
+      },
+      {
+        "financial_account_name": "Bitcoin Account",
+        "requested_at_ts": 1778490368,
+        "resolved_at_ts": 1778490740,
+        "status": "confirmed",
+        "amount_sats": 212,
+        "fee_sats": 0,
+        "destination": "user@example.com",
+        "trigger_type": "triggered"
+      },
+      {
+        "financial_account_name": "Bitcoin Account",
+        "requested_at_ts": 1778835967,
+        "resolved_at_ts": 1778836280,
+        "status": "confirmed",
+        "amount_sats": 219,
+        "fee_sats": 0,
+        "destination": "user@example.com",
+        "trigger_type": "triggered"
+      },
+      {
+        "financial_account_name": "Bitcoin Account",
+        "requested_at_ts": 1779181567,
+        "resolved_at_ts": 1779181908,
+        "status": "confirmed",
+        "amount_sats": 207,
+        "fee_sats": 0,
+        "destination": "user@example.com",
+        "trigger_type": "triggered"
+      },
+      {
+        "financial_account_name": "Bitcoin Account",
+        "requested_at_ts": 1779527164,
+        "resolved_at_ts": 1779530965,
+        "status": "confirmed",
+        "amount_sats": 205,
+        "fee_sats": 0,
+        "destination": "user@example.com",
+        "trigger_type": "triggered"
+      },
+      {
+        "financial_account_name": "Bitcoin Account",
+        "requested_at_ts": 1779872763,
+        "resolved_at_ts": 1779873527,
+        "status": "confirmed",
+        "amount_sats": 209,
+        "fee_sats": 0,
+        "destination": "user@example.com",
+        "trigger_type": "triggered"
+      },
+      {
+        "financial_account_name": "Bitcoin Account",
+        "requested_at_ts": 1780218367,
+        "resolved_at_ts": 1780219114,
+        "status": "confirmed",
+        "amount_sats": 206,
+        "fee_sats": 0,
+        "destination": "user@example.com",
+        "trigger_type": "triggered"
+      },
+      {
+        "financial_account_name": "Bitcoin Account",
+        "requested_at_ts": 1780563964,
+        "resolved_at_ts": 1780564734,
+        "status": "confirmed",
+        "amount_sats": 203,
+        "fee_sats": 0,
+        "destination": "user@example.com",
+        "trigger_type": "triggered"
+      },
+      {
+        "financial_account_name": "Bitcoin Account",
+        "requested_at_ts": 1780909566,
+        "resolved_at_ts": 1780910331,
+        "status": "confirmed",
+        "amount_sats": 204,
+        "fee_sats": 0,
+        "destination": "user@example.com",
+        "trigger_type": "triggered"
+      },
+      {
+        "financial_account_name": "Bitcoin Account",
+        "requested_at_ts": 1781255163,
+        "resolved_at_ts": 1781255961,
+        "status": "confirmed",
+        "amount_sats": 203,
+        "fee_sats": 0,
+        "destination": "user@example.com",
+        "trigger_type": "triggered"
+      },
+      {
+        "financial_account_name": "Bitcoin Account",
+        "requested_at_ts": 1781600769,
+        "resolved_at_ts": 1781601099,
+        "status": "confirmed",
+        "amount_sats": 220,
+        "fee_sats": 0,
+        "destination": "user@example.com",
+        "trigger_type": "triggered"
+      },
+      {
+        "financial_account_name": "Bitcoin Account",
+        "requested_at_ts": 1781946364,
+        "resolved_at_ts": 1781946692,
+        "status": "confirmed",
+        "amount_sats": 232,
+        "fee_sats": 0,
+        "destination": "user@example.com",
+        "trigger_type": "triggered"
+      },
+      {
+        "financial_account_name": "Bitcoin Account",
+        "requested_at_ts": 1782291970,
+        "resolved_at_ts": 1782292774,
+        "status": "confirmed",
+        "amount_sats": 229,
+        "fee_sats": 0,
+        "destination": "user@example.com",
+        "trigger_type": "triggered"
+      },
+      {
+        "financial_account_name": "Bitcoin Account",
+        "requested_at_ts": 1782637569,
+        "resolved_at_ts": 1782638345,
+        "status": "confirmed",
+        "amount_sats": 223,
+        "fee_sats": 0,
+        "destination": "user@example.com",
+        "trigger_type": "triggered"
+      },
+      {
+        "financial_account_name": "Bitcoin Account",
+        "requested_at_ts": 1783069578,
+        "resolved_at_ts": 1783070437,
+        "status": "confirmed",
+        "amount_sats": 265,
+        "fee_sats": 0,
+        "destination": "user@example.com",
+        "trigger_type": "triggered"
+      },
+      {
+        "financial_account_name": "Bitcoin Account",
+        "requested_at_ts": 1783415166,
+        "resolved_at_ts": 1783415566,
+        "status": "confirmed",
+        "amount_sats": 212,
+        "fee_sats": 0,
+        "destination": "user@example.com",
+        "trigger_type": "triggered"
+      },
+      {
+        "financial_account_name": "Bitcoin Account",
+        "requested_at_ts": 1783760768,
+        "resolved_at_ts": 1783761067,
+        "status": "confirmed",
+        "amount_sats": 210,
+        "fee_sats": 0,
+        "destination": "user@example.com",
+        "trigger_type": "triggered"
+      },
+      {
+        "financial_account_name": "Bitcoin Account",
+        "requested_at_ts": 1784106370,
+        "resolved_at_ts": 1784107181,
+        "status": "confirmed",
+        "amount_sats": 221,
+        "fee_sats": 0,
+        "destination": "user@example.com",
+        "trigger_type": "triggered"
+      },
+      {
+        "financial_account_name": "Bitcoin Account",
+        "requested_at_ts": 1784451968,
+        "resolved_at_ts": 1784452281,
+        "status": "confirmed",
+        "amount_sats": 223,
+        "fee_sats": 0,
+        "destination": "user@example.com",
+        "trigger_type": "triggered"
+      },
+      {
+        "financial_account_name": "Bitcoin Account",
+        "requested_at_ts": 1784797565,
+        "resolved_at_ts": 1784798410,
+        "status": "confirmed",
+        "amount_sats": 224,
+        "fee_sats": 0,
+        "destination": "user@example.com",
+        "trigger_type": "triggered"
+      },
+      {
+        "financial_account_name": "Bitcoin Account",
+        "requested_at_ts": 1785143173,
+        "resolved_at_ts": 1785143985,
+        "status": "confirmed",
+        "amount_sats": 220,
+        "fee_sats": 0,
+        "destination": "user@example.com",
+        "trigger_type": "triggered"
+      },
+      {
+        "financial_account_name": "Bitcoin Account",
+        "requested_at_ts": 1785488770,
+        "resolved_at_ts": 1785489645,
+        "status": "confirmed",
+        "amount_sats": 223,
+        "fee_sats": 0,
+        "destination": "user@example.com",
+        "trigger_type": "triggered"
+      },
+      {
+        "financial_account_name": "Bitcoin Account",
+        "requested_at_ts": 1785834368,
+        "resolved_at_ts": 1785835231,
+        "status": "confirmed",
+        "amount_sats": 226,
+        "fee_sats": 0,
+        "destination": "user@example.com",
+        "trigger_type": "triggered"
+      },
+      {
+        "financial_account_name": "Bitcoin Account",
+        "requested_at_ts": 1786179970,
+        "resolved_at_ts": 1786180783,
+        "status": "confirmed",
+        "amount_sats": 224,
+        "fee_sats": 0,
+        "destination": "user@example.com",
+        "trigger_type": "triggered"
+      },
+      {
+        "financial_account_name": "Bitcoin Account",
+        "requested_at_ts": 1786525567,
+        "resolved_at_ts": 1786526292,
+        "status": "confirmed",
+        "amount_sats": 223,
+        "fee_sats": 0,
+        "destination": "user@example.com",
+        "trigger_type": "triggered"
+      },
+      {
+        "financial_account_name": "Bitcoin Account",
+        "requested_at_ts": 1786871167,
+        "resolved_at_ts": 1786871988,
+        "status": "confirmed",
+        "amount_sats": 222,
+        "fee_sats": 0,
+        "destination": "user@example.com",
+        "trigger_type": "triggered"
+      },
+      {
+        "financial_account_name": "Bitcoin Account",
+        "requested_at_ts": 1787216769,
+        "resolved_at_ts": 1787217570,
+        "status": "confirmed",
+        "amount_sats": 225,
+        "fee_sats": 0,
+        "destination": "user@example.com",
+        "trigger_type": "triggered"
+      },
+      {
+        "financial_account_name": "Bitcoin Account",
+        "requested_at_ts": 1787562367,
+        "resolved_at_ts": 1787563132,
+        "status": "confirmed",
+        "amount_sats": 223,
+        "fee_sats": 0,
+        "destination": "user@example.com",
+        "trigger_type": "triggered"
+      },
+      {
+        "financial_account_name": "Bitcoin Account",
+        "requested_at_ts": 1787907971,
+        "resolved_at_ts": 1787910088,
+        "status": "confirmed",
+        "amount_sats": 223,
+        "fee_sats": 0,
+        "destination": "user@example.com",
+        "trigger_type": "triggered"
+      },
+      {
+        "financial_account_name": "Bitcoin Account",
+        "requested_at_ts": 1788253584,
+        "resolved_at_ts": 1788253915,
+        "status": "confirmed",
+        "amount_sats": 226,
+        "fee_sats": 0,
+        "destination": "user@example.com",
+        "trigger_type": "triggered"
+      },
+      {
+        "financial_account_name": "Bitcoin Account",
+        "requested_at_ts": 1788599172,
+        "resolved_at_ts": 1788600008,
+        "status": "confirmed",
+        "amount_sats": 225,
+        "fee_sats": 0,
+        "destination": "user@example.com",
+        "trigger_type": "triggered"
+      },
+      {
+        "financial_account_name": "Bitcoin Account",
+        "requested_at_ts": 1788944771,
+        "resolved_at_ts": 1788945600,
+        "status": "confirmed",
+        "amount_sats": 224,
+        "fee_sats": 0,
+        "destination": "user@example.com",
+        "trigger_type": "triggered"
+      },
+      {
+        "financial_account_name": "Bitcoin Account",
+        "requested_at_ts": 1789290371,
+        "resolved_at_ts": 1789291210,
+        "status": "confirmed",
+        "amount_sats": 221,
+        "fee_sats": 0,
+        "destination": "user@example.com",
+        "trigger_type": "triggered"
+      },
+      {
+        "financial_account_name": "Bitcoin Account",
+        "requested_at_ts": 1789635968,
+        "resolved_at_ts": 1789636844,
+        "status": "confirmed",
+        "amount_sats": 223,
+        "fee_sats": 0,
+        "destination": "user@example.com",
+        "trigger_type": "triggered"
+      },
+      {
+        "financial_account_name": "Bitcoin Account",
+        "requested_at_ts": 1789981579,
+        "resolved_at_ts": 1789981892,
+        "status": "confirmed",
+        "amount_sats": 218,
+        "fee_sats": 0,
+        "destination": "user@example.com",
+        "trigger_type": "triggered"
+      },
+      {
+        "financial_account_name": "Bitcoin Account",
+        "requested_at_ts": 1790327259,
+        "resolved_at_ts": 1790327582,
+        "status": "confirmed",
+        "amount_sats": 213,
+        "fee_sats": 0,
+        "destination": "user@example.com",
+        "trigger_type": "triggered"
+      }
+    ]
+  }
+}

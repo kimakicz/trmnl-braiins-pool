@@ -1,0 +1,32 @@
+<div class="layout layout--row layout--stretch-x gap--large">
+  <div class="grid grid--cols-4 w--full">
+    <div class="col--span-2 flex flex--col flex--left">
+      <span class="label">Hashrate · 5 min</span>
+      <div class="flex flex--row flex--bottom gap--small">
+        {% if has_profile %}<span class="value value--xxxlarge value--tnums">{{ hr_5m }}</span>{% else %}<span class="value value--large">Bez dat</span>{% endif %}
+        {% if has_profile %}<span class="value value--base">TH/s</span>{% endif %}
+      </div>
+      <span class="label label--gray">24 h: {% if has_profile %}{{ hr_24h }}{% else %}–{% endif %} TH/s · {{ status_text }}</span>
+    </div>
+    <div class="flex flex--col flex--left">
+      <span class="label">K výplatě</span>
+      <span class="value {% if bal_len <= 6 %}value--large{% elsif bal_len <= 9 %}value--base{% else %}value--small{% endif %} value--tnums bp-nw">{% if has_profile %}{{ balance_sats }}{% else %}–{% endif %}</span>
+      <span class="label label--gray">{% if has_profile %}sats · dnes +{{ today_sats }}{% else %}Bez dat{% endif %}</span>
+    </div>
+    <div class="flex flex--col flex--left">
+      <span class="label">Poslední výplata</span>
+      {% if last_payout %}
+        <span class="value {% if lp_len <= 6 %}value--large{% elsif lp_len <= 9 %}value--base{% else %}value--small{% endif %} value--tnums bp-nw">{{ lp_sats }}</span>
+        <span class="label label--gray">{{ lp_date }} · {{ lp_status }}</span>
+      {% else %}
+        <span class="value value--large">–</span>
+        <span class="label label--gray">{{ no_payout_short }}</span>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<div class="title_bar">
+  <span class="title">Braiins Pool</span>
+  <span class="instance">{{ instance }}</span>
+</div>

@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# Podstrčí běžícímu `trmnlp serve` data ze scénáře (fixtures/scenarios/<name>.json).
+# trmnlp čte polovaná data z ~/.cache/trmnl/data.json při každém renderu.
+# Návrat k živým datům: bin/scenario --live (vyvolá /poll).
+set -euo pipefail
+cd "$(dirname "$0")/.."
+CACHE="${XDG_CACHE_HOME:-$HOME/.cache}/trmnl/data.json"
+if [ "${1:-}" = "--live" ]; then curl -s -o /dev/null http://127.0.0.1:4567/poll; echo "live"; exit; fi
+cp "fixtures/scenarios/${1:?název scénáře}.json" "$CACHE"; echo "$1"

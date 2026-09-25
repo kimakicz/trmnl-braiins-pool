@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# Screenshot běžícího trmnlp preview v rozlišení TRMNL X (1872×1404, density 2x, 4bit).
+# Použití: bin/shot [view] [out.png] [palette-class]
+set -euo pipefail
+VIEW="${1:-full}"; OUT="${2:-_build/$VIEW.png}"; PAL="${3:-screen--4bit}"
+CLASSES="screen $PAL screen--v2 screen--lg screen--density-2x"
+URL="http://127.0.0.1:4567/render/$VIEW.html?screen_classes=$(python3 -c 'import sys,urllib.parse;print(urllib.parse.quote(sys.argv[1]))' "$CLASSES")"
+mkdir -p "$(dirname "$OUT")"
+"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless=new --disable-gpu --hide-scrollbars \
+  --window-size=${W:-1872},${H:-1404} --force-device-scale-factor=1 --virtual-time-budget=4000 \
+  --screenshot="$OUT" "$URL" >/dev/null 2>&1
+echo "$OUT"
+# zmenšený náhled pro rychlou kontrolu
+sips -Z 1040 "$OUT" --out "${OUT%.png}_small.png" >/dev/null

@@ -1,0 +1,48 @@
+<div class="layout layout--col layout--stretch-x gap--large">
+  <div class="flex flex--col flex--left">
+    <span class="label">Hashrate · 5 min</span>
+    <div class="flex flex--row flex--bottom gap--small">
+      {% if has_profile %}<span class="value value--xxxlarge value--tnums">{{ hr_5m }}</span>{% else %}<span class="value value--large">Bez dat</span>{% endif %}
+      {% if has_profile %}<span class="value value--base">TH/s</span>{% endif %}
+    </div>
+    <span class="label label--gray">24 h: {% if has_profile %}{{ hr_24h }}{% else %}–{% endif %} TH/s</span>
+    <span class="label {% if status_bad %}label--inverted{% else %}label--outline{% endif %}">{{ status_text }}</span>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="flex flex--col flex--left gap--medium">
+    <div class="item">
+      <div class="meta"></div>
+      <div class="content">
+        <span class="label">K výplatě</span>
+        <span class="value value--large value--tnums bp-nw">{% if has_profile %}{{ balance_sats }}{% else %}–{% endif %} <span class="label label--gray">sats</span></span>
+      </div>
+    </div>
+    <div class="item">
+      <div class="meta"></div>
+      <div class="content">
+        <span class="label">Dnes vytěženo</span>
+        <span class="value value--large value--tnums bp-nw">{% if has_profile %}{{ today_sats }}{% else %}–{% endif %} <span class="label label--gray">sats</span></span>
+      </div>
+    </div>
+    <div class="item">
+      <div class="meta"></div>
+      <div class="content">
+        <span class="label">Poslední výplata</span>
+        {% if last_payout %}
+          <span class="value value--large value--tnums bp-nw">{{ lp_sats }} <span class="label label--gray">sats</span></span>
+          <span class="label label--gray">{{ lp_date }} · {{ lp_status }}</span>
+        {% else %}
+          <span class="value value--large">–</span>
+          <span class="label label--gray">{{ no_payout_short }}</span>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="title_bar">
+  <span class="title">Braiins Pool</span>
+  <span class="instance">{{ instance }}</span>
+</div>
