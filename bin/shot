@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# Screenshot běžícího trmnlp preview.
-# Použití: [MODEL=x|og] bin/shot [view] [out.png] [palette-class]
-#   MODEL=x  (výchozí) TRMNL X: 1872×1404, screen--v2 screen--lg screen--density-2x, paleta screen--4bit
-#   MODEL=og původní TRMNL: 800×480, screen--og screen--md screen--density-1x, paleta screen--1bit
+# Screenshot of the running trmnlp preview.
+# Usage: [MODEL=x|og] bin/shot [view] [out.png] [palette-class]
+#   MODEL=x  (default) TRMNL X: 1872×1404, screen--v2 screen--lg screen--density-2x, palette screen--4bit
+#   MODEL=og original TRMNL: 800×480, screen--og screen--md screen--density-1x, palette screen--1bit
 set -euo pipefail
 VIEW="${1:-full}"; OUT="${2:-_build/$VIEW.png}"
 case "${MODEL:-x}" in
@@ -16,5 +16,5 @@ mkdir -p "$(dirname "$OUT")"
   --window-size=$W,$H --force-device-scale-factor=1 --virtual-time-budget=4000 \
   --screenshot="$OUT" "$URL" >/dev/null 2>&1
 echo "$OUT"
-# zmenšený náhled pro rychlou kontrolu (u OG je obrázek už malý)
+# downscaled copy for a quick look (the OG image is already small)
 if [ "$W" -gt 1040 ]; then sips -Z 1040 "$OUT" --out "${OUT%.png}_small.png" >/dev/null; else cp "$OUT" "${OUT%.png}_small.png"; fi

@@ -1,48 +1,52 @@
 # TRMNL plugin: Braiins Miner
 
-Private plugin pro [TRMNL](https://trmnl.com), laděný na **TRMNL X** a ověřený i na původním TRMNL (800×480, 1bit). Zobrazuje stav mineru
-těžícího na [Braiins Pool](https://pool.braiins.com). Data bere z webového API poolu, ne z lokálního API mineru.
+A [TRMNL](https://trmnl.com) plugin that shows the status of your miners on [Braiins Pool](https://pool.braiins.com).
+Built for **TRMNL X** and also tested on the original TRMNL (800×480, 1-bit).
+Data comes from the pool's web API, not from the miner's local API.
 
-- **Dnes vytěženo** a **poslední výplata** (částka, datum, stav) jako hlavní čísla. Částky jsou v sats.
-- **Denní odměny za 14 dní**: sloupcový graf (osa od nuly, propad = výpadek mineru) s tečkami ve dnech výplat.
-- **Hashrate**: 24h průměr v TH/s (od 1 000 TH/s v PH/s) a stav workerů. U jednoho workeru slovně (Online / Offline / Nízký výkon), u více workerů s počty, např. „3/12 offline · 1 slabý“.
-- **Celkem vytěženo**: `all_time_reward` z profilu v sats.
+*Česká verze je [níže](#česky).*
 
-Layouty: `full`, `half_horizontal`, `half_vertical`, `quadrant` (mashupy).
+- **Mined today** and **last payout** (amount, date, status) as the main numbers. All amounts are in sats.
+- **Daily rewards for the last 14 days**: a bar chart with the axis starting at zero, so a drop means a miner outage. A dot under a day marks a payout.
+- **Hashrate**: 24h average in TH/s (PH/s from 1,000 TH/s) and worker status. A single worker is shown in words (Online / Offline / Low hashrate), multiple workers with counts, e.g. "3/12 offline · 1 low".
+- **Total mined**: `all_time_reward` from the profile, in sats.
 
-**Jazyk:** angličtina a čeština. Volí se v nastavení pluginu (pole *Language / Jazyk*): `Auto` použije češtinu pro uživatele
-s locale `cs`, jinak angličtinu. Čeština formátuje čísla jako `1 234` a `1,14`, angličtina jako `1,234` a `1.14`.
+Layouts: `full`, `half_horizontal`, `half_vertical`, `quadrant` (mashups).
 
-## Jak to funguje
+**Language:** English and Czech, set in the plugin settings (*Language / Jazyk*). `Auto` uses Czech for users with
+locale `cs` and English otherwise. English formats numbers as `1,234` and `1.14`, Czech as `1 234` and `1,14`.
 
-Strategie **polling**, tři URL (v šablonách `IDX_0`, `IDX_1`, `IDX_2`):
+## How it works
 
-| | URL | Poznámka |
+Strategy **polling** with three URLs (`IDX_0`, `IDX_1`, `IDX_2` in the templates):
+
+| | URL | Note |
 |---|---|---|
-| `IDX_0` | `https://pool.braiins.com/accounts/profile/json/btc/` | hashrate, balance, workeři |
-| `IDX_1` | `https://pool.braiins.com/accounts/payouts/json/btc?from={{ "now" \| date: "%s" \| minus: 7776000 \| date: "%Y-%m-%d" }}` | výplaty za posledních 90 dní |
-| `IDX_2` | `https://pool.braiins.com/accounts/rewards/json/btc?from={{ "now" \| date: "%s" \| minus: 1209600 \| date: "%Y-%m-%d" }}` | denní odměny za 14 dní (jen uzavřené dny, od nejnovějšího) |
+| `IDX_0` | `https://pool.braiins.com/accounts/profile/json/btc/` | hashrate, rewards, workers |
+| `IDX_1` | `https://pool.braiins.com/accounts/payouts/json/btc?from={{ "now" \| date: "%s" \| minus: 7776000 \| date: "%Y-%m-%d" }}` | payouts in the last 90 days |
+| `IDX_2` | `https://pool.braiins.com/accounts/rewards/json/btc?from={{ "now" \| date: "%s" \| minus: 1209600 \| date: "%Y-%m-%d" }}` | daily rewards for 14 days (completed days only, newest first) |
 
-Token se posílá v hlavičce `Pool-Auth-Token={{ pool_token }}`. `pool_token` je custom field typu `password`,
-takže není natvrdo v šabloně ani v repu.
+The token is sent in the header `Pool-Auth-Token={{ pool_token }}`. `pool_token` is a custom field of type `password`,
+so it is never hard-coded in the templates or stored in the repo.
 
-Chování API (ověřeno 25. 9. 2026):
+API behavior (verified on Sep 25, 2026):
 
-- **Výběr výplat:** `from`/`to` jsou volitelné a bez nich API vrátí celou historii. Budoucí datum projde. `from > to` a nevalidní datum vrací HTTP 400.
-- **Pořadí:** položky jsou seřazené vzestupně (nejstarší první). Šablona přesto spojí `lightning` + `onchain` a řadí podle `requested_at_ts`.
-- **Proč 90denní okno:** celá historie roste zhruba o 640 B na výplatu. TRMNL má limit 100 KB na polovaná data, takže by za necelý rok přestal fungovat.
-- **Rate limit:** zhruba 1 req / 5 s. Tři požadavky hned po sobě prošly bez problému.
+- **Payout range:** `from`/`to` are optional; without them the API returns the full history. Future dates are accepted. `from > to` and invalid dates return HTTP 400.
+- **Order:** items are sorted ascending (oldest first). The template still merges `lightning` + `onchain` and sorts by `requested_at_ts`.
+- **Why a 90-day window:** the full history grows by about 640 B per payout. TRMNL limits polled data to 100 KB, so the plugin would stop working within a year.
+- **Rate limit:** about 1 request / 5 s. Three requests in a row worked fine.
 
-## Nastavení
+## Setup
 
-### 1. Token v Braiins Pool
+### 1. Braiins Pool token
 
-V Braiins Pool otevři **Settings → Access Profiles**, zapni **Allow access to web APIs** a klikni na **Generate New token**.
+In Braiins Pool, open **Settings → Access Profiles**, enable **Allow access to web APIs** and click **Generate New token**.
+The token is read-only.
 
-### 2. Lokální vývoj (trmnlp)
+### 2. Local development (trmnlp)
 
-Požadavky: Ruby ≥ 4.0 a gem `trmnl_preview`. Systémové Ruby na macOS (2.6) nestačí a Homebrew Ruby je keg-only,
-proto je potřeba ho dát do `PATH`. Platí to i pro `trmnlp login` a `trmnlp push`. `bin/serve` si ho přidá sám.
+Requirements: Ruby ≥ 4.0 and the `trmnl_preview` gem. The macOS system Ruby (2.6) is too old, and Homebrew Ruby is keg-only,
+so it has to be added to `PATH`. This also applies to `trmnlp login` and `trmnlp push`. `bin/serve` adds it on its own.
 
 ```sh
 brew install ruby
@@ -51,54 +55,77 @@ gem install trmnl_preview
 ```
 
 ```sh
-cp .env.example .env          # a doplň BRAIINS_POOL_TOKEN
-bin/serve                     # trmnlp serve s tokenem z .env → http://127.0.0.1:4567
+cp .env.example .env          # and fill in BRAIINS_POOL_TOKEN
+bin/serve                     # trmnlp serve with the token from .env → http://127.0.0.1:4567
 ```
 
-V preview zvol model **TRMNL X** a paletu **16 Grays**.
+In the preview, pick the **TRMNL X** model and the **16 Grays** palette (or the original TRMNL with Black & White).
 
-Pomocné skripty:
+Helper scripts:
 
-- `bin/serve`: spustí `trmnlp serve` s `TZ=UTC`. TRMNL servery běží v UTC a šablona posouvá datum přes `trmnl.user.utc_offset`.
-- `[MODEL=x|og] bin/shot [view] [out.png] [palette]`: screenshot přes headless Chrome. `MODEL=x` (výchozí) = TRMNL X (1872×1404, 4bit), `MODEL=og` = původní TRMNL (800×480, 1bit).
-- `bin/scenario <name>`: podstrčí běžícímu serveru data z `fixtures/scenarios/` (offline miner, žádné výplaty, selhaná výplata, výpadek API, farma s více workery `farm_multi_worker`, velká farma v PH/s `farm_large`…). Návrat k živým datům: `bin/scenario --live`.
+- `bin/serve`: runs `trmnlp serve` with `TZ=UTC`. TRMNL servers run in UTC and the template shifts dates via `trmnl.user.utc_offset`.
+- `[MODEL=x|og] bin/shot [view] [out.png] [palette]`: screenshot via headless Chrome. `MODEL=x` (default) = TRMNL X (1872×1404, 4-bit), `MODEL=og` = original TRMNL (800×480, 1-bit).
+- `bin/scenario <name>`: feeds the running server with data from `fixtures/scenarios/` (offline miner, no payouts, failed payout, API outage, multi-worker farm `farm_multi_worker`, large PH/s farm `farm_large`…). Back to live data: `bin/scenario --live`.
 
-`fixtures/profile.json`, `fixtures/payouts.json` a `fixtures/rewards.json` jsou anonymizované reálné odpovědi API.
+`fixtures/profile.json`, `fixtures/payouts.json` and `fixtures/rewards.json` are anonymized real API responses.
 
-### 3. Nahrání do TRMNL
+### 3. Upload to TRMNL
 
 ```sh
-trmnlp login                  # API klíč z trmnl.com → Account
+trmnlp login                  # API key from trmnl.com → Account
 trmnlp push
 ```
 
-První `push` vytvoří nový private plugin a zapíše jeho `id` do `src/settings.yml`. **Tuhle změnu commitni.**
-Bez `id` by každý další `push` založil nový plugin.
+The first `push` creates a new private plugin and writes its `id` to `src/settings.yml`. **Commit that change.**
+Without the `id`, every later `push` would create another plugin.
 
-Pak v TRMNL otevři nastavení pluginu, vyplň **Braiins Pool API token** a přidej plugin do playlistu.
-Data se obnovují každých 15 min (`refresh_interval: 15`). Pool snapshotuje statistiky po 5 min.
+`push` uploads the whole `settings.yml`, including `recipe_overview`. If you edit the overview on the TRMNL website,
+the next `push` pulls it back into `settings.yml`, so commit it as well.
 
-## Struktura
+Then open the plugin settings in TRMNL, fill in **Braiins Pool API token** and add the plugin to a playlist.
+Data refreshes every 15 minutes (`refresh_interval: 15`); the pool snapshots its statistics every 5 minutes.
+
+## Structure
 
 ```
 src/
-  settings.yml          # polling, hlavičky, custom field pool_token
-  shared.liquid         # výpočty (TH/s, sats, stav workerů, poslední výplata) – vkládá se před každý layout
+  settings.yml          # polling, headers, custom fields (pool_token, language)
+  shared.liquid         # shared logic (translations, TH/s, sats, worker status, payouts, chart) – prepended to every layout
   full.liquid
   half_horizontal.liquid
   half_vertical.liquid
   quadrant.liquid
-.trmnlp.yml             # lokální konfigurace trmnlp (token z env, time_zone)
-fixtures/               # vzorová data + scénáře
+.trmnlp.yml             # local trmnlp config (token from env, time_zone)
+fixtures/               # sample data + scenarios
 bin/                    # serve / shot / scenario
 ```
 
 ## Logo
 
-Symbol Braiins je z [design.braiins.com](https://design.braiins.com/braiins/logos/braiins-symbol).
-Černá varianta je v `assets/braiins-symbol-black.svg` a v šabloně je vložená inline jako data URI (`shared.liquid`).
-Logo je ochranná známka Braiins, plugin s Braiins nijak nesouvisí.
+The Braiins symbol is from [design.braiins.com](https://design.braiins.com/braiins/logos/braiins-symbol).
+The black variant is in `assets/braiins-symbol-black.svg` and is embedded inline as a data URI in `shared.liquid`.
+The logo is a trademark of Braiins. This plugin is not affiliated with Braiins.
 
-## Omezení
+## Limitations
 
-Pool API nezná teploty, příkon ani uptime mineru. Miner musí těžit na `pool.braiins.com`.
+The pool API does not know miner temperatures, power draw or uptime. The miner has to mine on `pool.braiins.com`.
+
+---
+
+## Česky
+
+Plugin pro [TRMNL](https://trmnl.com), který zobrazuje stav minerů na [Braiins Pool](https://pool.braiins.com):
+dnes vytěžené sats, poslední výplatu, graf denních odměn za 14 dní, 24h hashrate, stav workerů a celkem vytěžené sats.
+Laděný na TRMNL X, funguje i na původním TRMNL. Data bere z webového API poolu, ne z lokálního API mineru.
+
+**Nastavení:**
+
+1. V Braiins Pool otevři **Settings → Access Profiles**, zapni **Allow access to web APIs** a vygeneruj token (**Generate New token**). Token je jen pro čtení.
+2. Přidej plugin v TRMNL a do nastavení vlož **Braiins Pool API token**.
+3. V poli **Language / Jazyk** zvol **Čeština** (nebo `Auto`, které češtinu zvolí podle jazyka účtu).
+4. Přidej plugin do playlistu. Data se obnovují každých 15 minut.
+
+**Lokální vývoj:** postup je stejný jako v anglické části výše (`bin/serve`, `bin/shot`, `bin/scenario`, `trmnlp push`).
+Po prvním `trmnlp push` commitni `id`, které se zapíše do `src/settings.yml`.
+
+Logo Braiins je ochranná známka Braiins, plugin s Braiins nijak nesouvisí.

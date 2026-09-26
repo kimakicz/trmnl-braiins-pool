@@ -1,10 +1,10 @@
 ---
-# Lokální konfigurace pro `trmnlp serve`. Token se bere z prostředí (.env), nikdy ho sem nepiš.
+# Local config for `trmnlp serve`. The token comes from the environment (.env) – never put it here.
 watch:
   - src
   - .trmnlp.yml
 time_zone: Europe/Prague
 custom_fields:
   pool_token: "{{ env.BRAIINS_POOL_TOKEN }}"
-  # jazyk náhledu: Auto (podle trmnl.user.locale, lokálně "en") / English / Čeština
+  # preview language: Auto (by trmnl.user.locale, "en" locally) / English / Čeština
   # language: "Čeština"

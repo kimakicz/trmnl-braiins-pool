@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-# Spustí trmnlp preview s tokenem z .env.
-# TZ=UTC: Liquid `date` na unix timestamp používá časovou zónu procesu; TRMNL servery běží v UTC
-# a posun do lokálního času dělá šablona přes trmnl.user.utc_offset.
+# Starts the trmnlp preview with the token from .env.
+# TZ=UTC: Liquid `date` on a unix timestamp uses the process time zone; TRMNL servers run in UTC
+# and the template shifts to local time via trmnl.user.utc_offset.
 set -euo pipefail
 cd "$(dirname "$0")/.."
-# Homebrew Ruby je keg-only – trmnlp potřebuje Ruby >= 4.0, systémové Ruby na macOS je 2.6
+# Homebrew Ruby is keg-only – trmnlp needs Ruby >= 4.0, the macOS system Ruby is 2.6
 if [ -x /opt/homebrew/opt/ruby/bin/ruby ]; then
   export PATH="/opt/homebrew/opt/ruby/bin:$(/opt/homebrew/opt/ruby/bin/gem env gemdir)/bin:$PATH"
 fi

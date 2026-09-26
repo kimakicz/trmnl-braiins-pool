@@ -1,10 +1,10 @@
 {%- comment -%}
-  Sdílená logika – trmnlp i TRMNL tento soubor vkládají před každou šablonu.
+  Shared logic – trmnlp and TRMNL prepend this file to every layout template.
   IDX_0 = accounts/profile/json/btc/, IDX_1 = accounts/payouts/json/btc, IDX_2 = accounts/rewards/json/btc
 {%- endcomment -%}
 
 {%- comment -%}
-  Jazyk: custom field `language` (Auto / English / Čeština); Auto = čeština pro locale cs, jinak angličtina.
+  Language: custom field `language` (Auto / English / Čeština); Auto = Czech for locale cs, English otherwise.
 {%- endcomment -%}
 {%- assign lang_pref = trmnl.plugin_settings.custom_fields_values.language | default: "Auto" -%}
 {%- assign user_locale = trmnl.user.locale | default: "en" | downcase | slice: 0, 2 -%}
@@ -67,7 +67,7 @@
 {%- assign has_profile = false -%}
 {%- if p and p.hash_rate_5m != nil -%}{%- assign has_profile = true -%}{%- endif -%}
 
-{%- comment -%} Hashrate 24 h → TH/s podle hash_rate_unit (typicky Gh/s); od 1000 TH/s zobrazit v PH/s {%- endcomment -%}
+{%- comment -%} 24h hashrate → TH/s based on hash_rate_unit (usually Gh/s); shown in PH/s from 1000 TH/s {%- endcomment -%}
 {%- assign hr_unit = p.hash_rate_unit | downcase -%}
 {%- case hr_unit -%}
   {%- when "ph/s" -%}{%- assign hr_factor = 1000 -%}
@@ -82,15 +82,15 @@
   {%- assign hr_24h = hr_24h_th | number_to_currency: "", sep_t, sep_d, 2 -%}{%- assign hr_label = "TH/s" -%}
 {%- endif -%}
 
-{%- comment -%} BTC stringy → sats {%- endcomment -%}
+{%- comment -%} BTC strings → sats {%- endcomment -%}
 {%- assign total_sats = p.all_time_reward | default: 0 | times: 100000000 | round | number_with_delimiter: sep_t, sep_d -%}
 {%- assign today_sats = p.today_reward | default: 0 | times: 100000000 | round | number_with_delimiter: sep_t, sep_d -%}
-{%- comment -%} Velikost písma podle délky čísla (počet znaků vč. oddělovačů), ať se vejde do sloupce {%- endcomment -%}
+{%- comment -%} Font size by number length (characters incl. separators) so it fits its column {%- endcomment -%}
 {%- assign today_len = today_sats | size -%}
 
 {%- comment -%}
-  Stav workerů. Jeden worker → slovně (Online / Offline / Nízký výkon),
-  víc workerů → počty s kontextem, např. „3/12 offline · 1 slabý“.
+  Worker status. Single worker → words (Online / Offline / Low hashrate),
+  multiple workers → counts with context, e.g. "3/12 offline · 1 low".
 {%- endcomment -%}
 {%- assign w_ok = p.ok_workers | default: 0 -%}
 {%- assign w_low = p.low_workers | default: 0 -%}
@@ -117,8 +117,8 @@
 {%- endif -%}
 
 {%- comment -%}
-  Poslední výplata: lightning + onchain, seřadit podle requested_at_ts (int), vzít poslední.
-  API vrací položky vzestupně (nejstarší první), takže `last` sedí i bez sort.
+  Last payout: lightning + onchain, sorted by requested_at_ts (int), take the last one.
+  The API returns items in ascending order (oldest first), so `last` is correct even without sort.
 {%- endcomment -%}
 {%- assign empty_list = "" | split: "," -%}
 {%- if IDX_1.lightning == nil and IDX_1.onchain == nil -%}
@@ -143,9 +143,9 @@
 {%- endif -%}
 
 {%- comment -%}
-  Denní odměny (IDX_2): jen uzavřené dny, API vrací od nejnovějšího → seřadit vzestupně.
-  Výška sloupce v krocích po 5 % (třídy bp-h-0…bp-h-100), osa vždy od nuly.
-  Tečka pod sloupcem = v ten den (UTC, stejně jako `date` odměny) byla vyžádána výplata.
+  Daily rewards (IDX_2): completed days only, the API returns newest first → sort ascending.
+  Bar height in 5 % steps (classes bp-h-0…bp-h-100), axis always starts at zero.
+  Dot under a bar = a payout was requested that day (UTC, same as the reward `date`).
 {%- endcomment -%}
 {%- assign rewards = IDX_2.btc.daily_rewards | default: empty_list | sort: "date" -%}
 {%- assign rw_max = 1 -%}{%- assign rw_sum = 0 -%}
@@ -208,20 +208,20 @@
 </div>
 </div>
 {%- endcapture -%}
-{%- comment -%} Braiins symbol (design.braiins.com/braiins/logos/braiins-symbol), černá varianta {%- endcomment -%}
+{%- comment -%} Braiins symbol (design.braiins.com/braiins/logos/braiins-symbol), black variant {%- endcomment -%}
 {%- capture braiins_logo -%}data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 864 864'%3E%3Cpolygon points='345.6 864 345.6 682.76 194.4 179.9 194.4 0 0 0 0 179.9 151.2 682.76 151.2 864 345.6 864'/%3E%3Cpolygon points='864 864 864 682.76 712.8 179.9 712.8 0 518.4 0 518.4 179.9 669.6 682.76 669.6 864 864 864'/%3E%3C/svg%3E{%- endcapture -%}
 {%- assign instance = trmnl.plugin_settings.instance_name | default: "Braiins Pool" -%}
-{%- comment -%} Čísla se nesmí zalomit uprostřed (oddělovač tisíců může být mezera) {%- endcomment -%}
+{%- comment -%} Numbers must not wrap (the thousands separator may be a space) {%- endcomment -%}
 <style>
   .bp-nw { white-space: nowrap; }
-  /* Vedlejší popisky: šedé na 2/4bit, v 1bit černé (rastrovaná šeď je u malého písma nečitelná) */
+  /* Secondary labels: gray on 2/4-bit, black on 1-bit (dithered gray is unreadable at small sizes) */
   .bp-muted { color: #666; }
   .screen--1bit .bp-muted { color: #000; }
-  /* Malé displeje (OG 800×480): v half_vertical se graf nevejde */
+  /* Small screens (OG 800×480): the chart does not fit in half_vertical */
   .screen--md .bp-hide-md { display: none; }
   .bp-top { align-items: start; }
   .bp-top > * { min-width: 0; }
-  /* Kontejner pro data-value-fit: smí se zúžit na dostupné místo vedle jednotky „sats" */
+  /* data-value-fit container: may shrink to the space left next to the "sats" unit */
   .bp-fitrow { width: 100%; justify-content: flex-start; }
   .bp-fitbox { flex: 0 1 auto; min-width: 0; }
   .bp-gap-top { margin-top: 12px; }
