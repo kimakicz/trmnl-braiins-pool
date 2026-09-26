@@ -1,4 +1,4 @@
-<div class="layout layout--col layout--stretch-x gap--large">
+<div class="layout layout--col layout--stretch-x gap--space-between">
   <div class="grid grid--cols-5 bp-top">
     <div class="col--span-2 flex flex--col flex--left">
       <span class="label">Dnes vytěženo</span>
@@ -31,28 +31,14 @@
     </div>
   </div>
 
-  {% if recent.size > 0 %}
-  <table class="table table--large bp-table">
-    <thead>
-      <tr>
-        <th><span class="title">Datum</span></th>
-        <th class="bp-num"><span class="title">sats</span></th>
-        <th class="bp-barcol"></th>
-        <th><span class="title">Stav</span></th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for x in recent limit: 5 %}
-        {% assign pct = x.amount_sats | times: 100 | divided_by: recent_max | at_least: 2 %}
-        <tr>
-          <td><span class="label bp-nw">{{ x.requested_at_ts | plus: trmnl.user.utc_offset | date: "%-d. %-m. %Y" }}</span></td>
-          <td class="bp-num"><span class="label value--tnums bp-nw">{{ x.amount_sats | number_with_delimiter: " ", "," }}</span></td>
-          <td class="bp-barcell"><div class="bp-bar" style="width: {{ pct }}%"></div></td>
-          <td><span class="label bp-nw">{% case x.status %}{% when "confirmed" %}Potvrzena{% when "queued" %}Ve frontě{% when "failed" %}Selhala{% else %}{{ x.status }}{% endcase %}</span></td>
-        </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+  {% if rewards.size > 0 %}
+  <div class="bp-grow gap--small">
+    <div class="flex flex--row flex--between stretch-x">
+      <span class="label">Denní odměny</span>
+      <span class="label label--gray bp-nw">Ø {{ rw_avg }} sats/den</span>
+    </div>
+    {{ reward_chart_14 }}
+  </div>
   {% endif %}
 </div>
 

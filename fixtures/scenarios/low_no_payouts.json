@@ -24,5 +24,10 @@
   "IDX_1": {
     "onchain": [],
     "lightning": []
+  },
+  "IDX_2": {
+    "btc": {
+      "daily_rewards": []
+    }
   }
 }

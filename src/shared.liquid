@@ -72,23 +72,107 @@
   {%- endcase -%}
 {%- endif -%}
 
-{%- comment -%} Posledních 5 výplat (nejnovější první) + maximum pro délku pruhů {%- endcomment -%}
-{%- assign recent = payouts | reverse -%}
-{%- assign recent_max = 1 -%}
-{%- for x in recent limit: 5 -%}
-  {%- if x.amount_sats > recent_max -%}{%- assign recent_max = x.amount_sats -%}{%- endif -%}
+{%- comment -%}
+  Denní odměny (IDX_2): jen uzavřené dny, API vrací od nejnovějšího → seřadit vzestupně.
+  Výška sloupce v krocích po 5 % (třídy bp-h-0…bp-h-100), osa vždy od nuly.
+  Tečka pod sloupcem = v ten den (UTC, stejně jako `date` odměny) byla vyžádána výplata.
+{%- endcomment -%}
+{%- assign rewards = IDX_2.btc.daily_rewards | default: empty_list | sort: "date" -%}
+{%- assign rw_max = 1 -%}{%- assign rw_sum = 0 -%}
+{%- for d in rewards -%}
+  {%- assign v = d.total_reward | times: 100000000 | round -%}
+  {%- assign rw_sum = rw_sum | plus: v -%}
+  {%- if v > rw_max -%}{%- assign rw_max = v -%}{%- endif -%}
 {%- endfor -%}
+{%- if rewards.size > 0 -%}
+  {%- assign rw_avg = rw_sum | divided_by: rewards.size -%}
+{%- endif -%}
 
+{%- assign chart_offset = 0 -%}{%- if rewards.size > 14 -%}{%- assign chart_offset = rewards.size | minus: 14 -%}{%- endif -%}
+{%- capture reward_chart_14 -%}
+<div class="bp-chartbox">
+<div class="bp-chart">
+  {%- for d in rewards offset: chart_offset -%}
+    {%- assign v = d.total_reward | times: 100000000 | round -%}
+    {%- assign h = v | times: 20 | divided_by: rw_max | times: 5 -%}
+    {%- if v > 0 and h < 5 -%}{%- assign h = 5 -%}{%- endif -%}
+    {%- assign day_end = d.date | plus: 86400 -%}
+    {%- assign paid = false -%}
+    {%- for x in payouts -%}{%- if x.requested_at_ts >= d.date and x.requested_at_ts < day_end -%}{%- assign paid = true -%}{%- endif -%}{%- endfor -%}
+    <div class="bp-col">
+      <div class="bp-colarea"><div class="bp-colbar bp-h-{{ h }}"></div></div>
+      <div class="bp-mark">{% if paid %}<span class="bp-dot"></span>{% endif %}</div>
+    </div>
+  {%- endfor -%}
+</div>
+{%- assign first_day = rewards[chart_offset] -%}{%- assign last_day = rewards | last -%}
+<div class="flex flex--row flex--between stretch-x">
+  <span class="label label--small label--gray">{{ first_day.date | plus: trmnl.user.utc_offset | date: "%-d. %-m." }}</span>
+  <span class="label label--small label--gray">• výplata</span>
+  <span class="label label--small label--gray">{{ last_day.date | plus: trmnl.user.utc_offset | date: "%-d. %-m." }}</span>
+</div>
+</div>
+{%- endcapture -%}
+{%- assign chart_offset = 0 -%}{%- if rewards.size > 7 -%}{%- assign chart_offset = rewards.size | minus: 7 -%}{%- endif -%}
+{%- capture reward_chart_7 -%}
+<div class="bp-chartbox">
+<div class="bp-chart">
+  {%- for d in rewards offset: chart_offset -%}
+    {%- assign v = d.total_reward | times: 100000000 | round -%}
+    {%- assign h = v | times: 20 | divided_by: rw_max | times: 5 -%}
+    {%- if v > 0 and h < 5 -%}{%- assign h = 5 -%}{%- endif -%}
+    {%- assign day_end = d.date | plus: 86400 -%}
+    {%- assign paid = false -%}
+    {%- for x in payouts -%}{%- if x.requested_at_ts >= d.date and x.requested_at_ts < day_end -%}{%- assign paid = true -%}{%- endif -%}{%- endfor -%}
+    <div class="bp-col">
+      <div class="bp-colarea"><div class="bp-colbar bp-h-{{ h }}"></div></div>
+      <div class="bp-mark">{% if paid %}<span class="bp-dot"></span>{% endif %}</div>
+    </div>
+  {%- endfor -%}
+</div>
+{%- assign first_day = rewards[chart_offset] -%}{%- assign last_day = rewards | last -%}
+<div class="flex flex--row flex--between stretch-x">
+  <span class="label label--small label--gray">{{ first_day.date | plus: trmnl.user.utc_offset | date: "%-d. %-m." }}</span>
+  <span class="label label--small label--gray">• výplata</span>
+  <span class="label label--small label--gray">{{ last_day.date | plus: trmnl.user.utc_offset | date: "%-d. %-m." }}</span>
+</div>
+</div>
+{%- endcapture -%}
 {%- comment -%} Braiins symbol (design.braiins.com/braiins/logos/braiins-symbol), černá varianta {%- endcomment -%}
 {%- capture braiins_logo -%}data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 864 864'%3E%3Cpolygon points='345.6 864 345.6 682.76 194.4 179.9 194.4 0 0 0 0 179.9 151.2 682.76 151.2 864 345.6 864'/%3E%3Cpolygon points='864 864 864 682.76 712.8 179.9 712.8 0 518.4 0 518.4 179.9 669.6 682.76 669.6 864 864 864'/%3E%3C/svg%3E{%- endcapture -%}
 {%- assign instance = trmnl.plugin_settings.instance_name | default: "Braiins Pool" -%}
 {%- comment -%} Čísla se nesmí zalomit uprostřed (oddělovač tisíců je mezera) {%- endcomment -%}
 <style>
   .bp-nw { white-space: nowrap; }
-  .bp-bar { height: 0.45em; background: #000; border-radius: 1em; }
-  .bp-table td, .bp-table th { vertical-align: middle; }
   .bp-top { align-items: start; }
-  .bp-num { text-align: right; }
-  .bp-barcol { width: 45%; }
-  .bp-barcell { padding-left: 12px; padding-right: 20px; }
+  .bp-grow { flex: 0 0 auto; height: 42%; min-height: 0; display: flex; flex-direction: column; }
+  .bp-grow--tall { height: 36%; }
+  .bp-chartbox { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; gap: 4px; }
+  .bp-chart { flex: 1 1 auto; min-height: 60px; display: flex; align-items: stretch; gap: 0; }
+  .bp-col { flex: 1 1 0; display: flex; flex-direction: column; }
+  .bp-colarea { flex: 1 1 auto; display: flex; align-items: flex-end; justify-content: center; border-bottom: 2px solid #000; }
+  .bp-colbar { width: 38%; background: #000; border-radius: 4px 4px 0 0; }
+  .bp-mark { height: 14px; display: flex; justify-content: center; align-items: center; }
+  .bp-dot { width: 8px; height: 8px; border-radius: 50%; background: #000; }
+  .bp-h-0 { height: 0%; }
+  .bp-h-5 { height: 5%; }
+  .bp-h-10 { height: 10%; }
+  .bp-h-15 { height: 15%; }
+  .bp-h-20 { height: 20%; }
+  .bp-h-25 { height: 25%; }
+  .bp-h-30 { height: 30%; }
+  .bp-h-35 { height: 35%; }
+  .bp-h-40 { height: 40%; }
+  .bp-h-45 { height: 45%; }
+  .bp-h-50 { height: 50%; }
+  .bp-h-55 { height: 55%; }
+  .bp-h-60 { height: 60%; }
+  .bp-h-65 { height: 65%; }
+  .bp-h-70 { height: 70%; }
+  .bp-h-75 { height: 75%; }
+  .bp-h-80 { height: 80%; }
+  .bp-h-85 { height: 85%; }
+  .bp-h-90 { height: 90%; }
+  .bp-h-95 { height: 95%; }
+  .bp-h-100 { height: 100%; }
 </style>

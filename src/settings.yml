@@ -10,6 +10,7 @@ refresh_interval_floor:
 polling_url: |-
   https://pool.braiins.com/accounts/profile/json/btc/
   https://pool.braiins.com/accounts/payouts/json/btc?from={{ "now" | date: "%s" | minus: 7776000 | date: "%Y-%m-%d" }}
+  https://pool.braiins.com/accounts/rewards/json/btc?from={{ "now" | date: "%s" | minus: 1209600 | date: "%Y-%m-%d" }}
 polling_headers: Pool-Auth-Token={{ pool_token }}
 polling_body: ''
 id: 488034

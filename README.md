@@ -4,19 +4,20 @@ Private plugin pro [TRMNL](https://trmnl.com) (laděno na **TRMNL X**). Zobrazuj
 těžícího na [Braiins Pool](https://pool.braiins.com). Data bere z webového API poolu, ne z lokálního API mineru.
 
 - **Dnes vytěženo** a **poslední výplata** (částka, datum, stav) jako hlavní čísla. Částky jsou v sats.
-- **Posledních 5 výplat**: tabulka s pruhy podle výše částky.
+- **Denní odměny za 14 dní**: sloupcový graf (osa od nuly, propad = výpadek mineru) s tečkami ve dnech výplat.
 - **Hashrate**: 24h průměr v TH/s a stav workerů (Online / Offline / Nízký výkon).
 
 Layouty: `full`, `half_horizontal`, `half_vertical`, `quadrant` (mashupy).
 
 ## Jak to funguje
 
-Strategie **polling**, dvě URL (v šablonách `IDX_0`, `IDX_1`):
+Strategie **polling**, tři URL (v šablonách `IDX_0`, `IDX_1`, `IDX_2`):
 
 | | URL | Poznámka |
 |---|---|---|
 | `IDX_0` | `https://pool.braiins.com/accounts/profile/json/btc/` | hashrate, balance, workeři |
 | `IDX_1` | `https://pool.braiins.com/accounts/payouts/json/btc?from={{ "now" \| date: "%s" \| minus: 7776000 \| date: "%Y-%m-%d" }}` | výplaty za posledních 90 dní |
+| `IDX_2` | `https://pool.braiins.com/accounts/rewards/json/btc?from={{ "now" \| date: "%s" \| minus: 1209600 \| date: "%Y-%m-%d" }}` | denní odměny za 14 dní (jen uzavřené dny, od nejnovějšího) |
 
 Token se posílá v hlavičce `Pool-Auth-Token={{ pool_token }}`. `pool_token` je custom field typu `password`,
 takže není natvrdo v šabloně ani v repu.
@@ -26,7 +27,7 @@ Chování API (ověřeno 25. 9. 2026):
 - **Výběr výplat:** `from`/`to` jsou volitelné a bez nich API vrátí celou historii. Budoucí datum projde. `from > to` a nevalidní datum vrací HTTP 400.
 - **Pořadí:** položky jsou seřazené vzestupně (nejstarší první). Šablona přesto spojí `lightning` + `onchain` a řadí podle `requested_at_ts`.
 - **Proč 90denní okno:** celá historie roste zhruba o 640 B na výplatu. TRMNL má limit 100 KB na polovaná data, takže by za necelý rok přestal fungovat.
-- **Rate limit:** zhruba 1 req / 5 s. Dva požadavky hned po sobě prošly bez problému.
+- **Rate limit:** zhruba 1 req / 5 s. Tři požadavky hned po sobě prošly bez problému.
 
 ## Nastavení
 
@@ -58,7 +59,7 @@ Pomocné skripty:
 - `bin/shot [view] [out.png] [palette]`: screenshot přes headless Chrome v rozlišení TRMNL X (1872×1404, `screen--v2 screen--lg screen--density-2x screen--4bit`).
 - `bin/scenario <name>`: podstrčí běžícímu serveru data z `fixtures/scenarios/` (offline miner, žádné výplaty, selhaná výplata, výpadek API…). Návrat k živým datům: `bin/scenario --live`.
 
-`fixtures/profile.json` a `fixtures/payouts.json` jsou anonymizované reálné odpovědi API.
+`fixtures/profile.json`, `fixtures/payouts.json` a `fixtures/rewards.json` jsou anonymizované reálné odpovědi API.
 
 ### 3. Nahrání do TRMNL
 

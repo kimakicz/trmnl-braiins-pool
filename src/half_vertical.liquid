@@ -27,19 +27,14 @@
       <span class="label label--gray">{{ no_payout_short }}</span>
     {% endif %}
   </div>
-  {% if recent.size > 1 %}
-  <table class="table table--condensed bp-table">
-    <tbody>
-      {% for x in recent limit: 5 %}
-        {% assign pct = x.amount_sats | times: 100 | divided_by: recent_max | at_least: 2 %}
-        <tr>
-          <td><span class="label bp-nw">{{ x.requested_at_ts | plus: trmnl.user.utc_offset | date: "%-d. %-m." }}</span></td>
-          <td class="bp-num"><span class="label value--tnums bp-nw">{{ x.amount_sats | number_with_delimiter: " ", "," }}{% if x.status == "queued" %} ⧗{% elsif x.status == "failed" %} ✕{% endif %}</span></td>
-          <td class="bp-barcol bp-barcell"><div class="bp-bar" style="width: {{ pct }}%"></div></td>
-        </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+  {% if rewards.size > 0 %}
+  <div class="bp-grow bp-grow--tall gap--small">
+    <div class="flex flex--row flex--between stretch-x">
+      <span class="label">Denní odměny</span>
+      <span class="label label--gray bp-nw">Ø {{ rw_avg }} sats/den</span>
+    </div>
+    {{ reward_chart_7 }}
+  </div>
   {% endif %}
 </div>
 
