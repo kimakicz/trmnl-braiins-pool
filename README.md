@@ -5,10 +5,13 @@ těžícího na [Braiins Pool](https://pool.braiins.com). Data bere z webového 
 
 - **Dnes vytěženo** a **poslední výplata** (částka, datum, stav) jako hlavní čísla. Částky jsou v sats.
 - **Denní odměny za 14 dní**: sloupcový graf (osa od nuly, propad = výpadek mineru) s tečkami ve dnech výplat.
-- **Hashrate**: 24h průměr v TH/s a stav workerů (Online / Offline / Nízký výkon).
+- **Hashrate**: 24h průměr v TH/s (od 1 000 TH/s v PH/s) a stav workerů. U jednoho workeru slovně (Online / Offline / Nízký výkon), u více workerů s počty, např. „3/12 offline · 1 slabý“.
 - **Celkem vytěženo**: `all_time_reward` z profilu v sats.
 
 Layouty: `full`, `half_horizontal`, `half_vertical`, `quadrant` (mashupy).
+
+**Jazyk:** angličtina a čeština. Volí se v nastavení pluginu (pole *Language / Jazyk*): `Auto` použije češtinu pro uživatele
+s locale `cs`, jinak angličtinu. Čeština formátuje čísla jako `1 234` a `1,14`, angličtina jako `1,234` a `1.14`.
 
 ## Jak to funguje
 
@@ -58,7 +61,7 @@ Pomocné skripty:
 
 - `bin/serve`: spustí `trmnlp serve` s `TZ=UTC`. TRMNL servery běží v UTC a šablona posouvá datum přes `trmnl.user.utc_offset`.
 - `bin/shot [view] [out.png] [palette]`: screenshot přes headless Chrome v rozlišení TRMNL X (1872×1404, `screen--v2 screen--lg screen--density-2x screen--4bit`).
-- `bin/scenario <name>`: podstrčí běžícímu serveru data z `fixtures/scenarios/` (offline miner, žádné výplaty, selhaná výplata, výpadek API…). Návrat k živým datům: `bin/scenario --live`.
+- `bin/scenario <name>`: podstrčí běžícímu serveru data z `fixtures/scenarios/` (offline miner, žádné výplaty, selhaná výplata, výpadek API, farma s více workery `farm_multi_worker`, velká farma v PH/s `farm_large`…). Návrat k živým datům: `bin/scenario --live`.
 
 `fixtures/profile.json`, `fixtures/payouts.json` a `fixtures/rewards.json` jsou anonymizované reálné odpovědi API.
 

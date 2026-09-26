@@ -1,12 +1,73 @@
 {%- comment -%}
   Sdílená logika – trmnlp i TRMNL tento soubor vkládají před každou šablonu.
-  IDX_0 = /accounts/profile/json/btc/, IDX_1 = /accounts/payouts/json/btc
+  IDX_0 = accounts/profile/json/btc/, IDX_1 = accounts/payouts/json/btc, IDX_2 = accounts/rewards/json/btc
 {%- endcomment -%}
+
+{%- comment -%}
+  Jazyk: custom field `language` (Auto / English / Čeština); Auto = čeština pro locale cs, jinak angličtina.
+{%- endcomment -%}
+{%- assign lang_pref = trmnl.plugin_settings.custom_fields_values.language | default: "Auto" -%}
+{%- assign user_locale = trmnl.user.locale | default: "en" | downcase | slice: 0, 2 -%}
+{%- if lang_pref == "Čeština" -%}{%- assign lang = "cs" -%}
+{%- elsif lang_pref == "English" -%}{%- assign lang = "en" -%}
+{%- elsif user_locale == "cs" -%}{%- assign lang = "cs" -%}
+{%- else -%}{%- assign lang = "en" -%}
+{%- endif -%}
+{%- if lang == "cs" -%}
+  {%- assign sep_t = " " -%}{%- assign sep_d = "," -%}
+  {%- assign fmt_date = "%-d. %-m. %Y" -%}{%- assign fmt_date_short = "%-d. %-m." -%}
+  {%- assign t_today = "Dnes vytěženo" -%}
+  {%- assign t_last_payout = "Poslední výplata" -%}
+  {%- assign t_hr24 = "Hashrate 24 h" -%}
+  {%- assign t_hr24_short = "24 h" -%}
+  {%- assign t_total = "Celkem vytěženo" -%}
+  {%- assign t_total_short = "Celkem" -%}
+  {%- assign t_daily = "Denní odměny" -%}
+  {%- assign t_per_day = "sats/den" -%}
+  {%- assign t_payout_mark = "výplata" -%}
+  {%- assign t_no_data = "Bez dat" -%}
+  {%- assign t_no_payout = "Žádná za posledních 90 dní" -%}
+  {%- assign t_no_payout_short = "Žádná za 90 dní" -%}
+  {%- assign t_api_down = "API nedostupné" -%}
+  {%- assign t_online = "Online" -%}
+  {%- assign t_offline = "Offline" -%}
+  {%- assign t_low = "Nízký výkon" -%}
+  {%- assign t_low_short = "slabý" -%}
+  {%- assign t_no_workers = "Žádný worker" -%}
+  {%- assign t_confirmed = "Potvrzena" -%}
+  {%- assign t_queued = "Ve frontě" -%}
+  {%- assign t_failed = "Selhala" -%}
+{%- else -%}
+  {%- assign sep_t = "," -%}{%- assign sep_d = "." -%}
+  {%- assign fmt_date = "%b %-d, %Y" -%}{%- assign fmt_date_short = "%b %-d" -%}
+  {%- assign t_today = "Mined today" -%}
+  {%- assign t_last_payout = "Last payout" -%}
+  {%- assign t_hr24 = "Hashrate 24h" -%}
+  {%- assign t_hr24_short = "24h" -%}
+  {%- assign t_total = "Total mined" -%}
+  {%- assign t_total_short = "Total" -%}
+  {%- assign t_daily = "Daily rewards" -%}
+  {%- assign t_per_day = "sats/day" -%}
+  {%- assign t_payout_mark = "payout" -%}
+  {%- assign t_no_data = "No data" -%}
+  {%- assign t_no_payout = "None in the last 90 days" -%}
+  {%- assign t_no_payout_short = "None in 90 days" -%}
+  {%- assign t_api_down = "API unavailable" -%}
+  {%- assign t_online = "Online" -%}
+  {%- assign t_offline = "Offline" -%}
+  {%- assign t_low = "Low hashrate" -%}
+  {%- assign t_low_short = "low" -%}
+  {%- assign t_no_workers = "No workers" -%}
+  {%- assign t_confirmed = "Confirmed" -%}
+  {%- assign t_queued = "Queued" -%}
+  {%- assign t_failed = "Failed" -%}
+{%- endif -%}
+
 {%- assign p = IDX_0.btc -%}
 {%- assign has_profile = false -%}
 {%- if p and p.hash_rate_5m != nil -%}{%- assign has_profile = true -%}{%- endif -%}
 
-{%- comment -%} Hashrate → TH/s podle hash_rate_unit (typicky Gh/s) {%- endcomment -%}
+{%- comment -%} Hashrate 24 h → TH/s podle hash_rate_unit (typicky Gh/s); od 1000 TH/s zobrazit v PH/s {%- endcomment -%}
 {%- assign hr_unit = p.hash_rate_unit | downcase -%}
 {%- case hr_unit -%}
   {%- when "ph/s" -%}{%- assign hr_factor = 1000 -%}
@@ -14,36 +75,45 @@
   {%- when "mh/s" -%}{%- assign hr_factor = 0.000001 -%}
   {%- else -%}{%- assign hr_factor = 0.001 -%}
 {%- endcase -%}
-{%- assign hr_5m = p.hash_rate_5m | default: 0 | times: hr_factor | number_to_currency: "", " ", ",", 2 -%}
-{%- assign hr_24h = p.hash_rate_24h | default: 0 | times: hr_factor | number_to_currency: "", " ", ",", 2 -%}
+{%- assign hr_24h_th = p.hash_rate_24h | default: 0 | times: hr_factor -%}
+{%- if hr_24h_th >= 1000 -%}
+  {%- assign hr_24h = hr_24h_th | divided_by: 1000.0 | number_to_currency: "", sep_t, sep_d, 2 -%}{%- assign hr_label = "PH/s" -%}
+{%- else -%}
+  {%- assign hr_24h = hr_24h_th | number_to_currency: "", sep_t, sep_d, 2 -%}{%- assign hr_label = "TH/s" -%}
+{%- endif -%}
 
 {%- comment -%} BTC stringy → sats {%- endcomment -%}
-{%- assign balance_raw = p.current_balance | default: 0 | times: 100000000 | round -%}
-{%- assign balance_sats = balance_raw | number_with_delimiter: " ", "," -%}
-{%- assign total_sats = p.all_time_reward | default: 0 | times: 100000000 | round | number_with_delimiter: " ", "," -%}
-{%- assign today_sats = p.today_reward | default: 0 | times: 100000000 | round | number_with_delimiter: " ", "," -%}
-
-{%- comment -%} Velikost písma podle délky čísla (počet znaků vč. mezer), ať se vejde do sloupce {%- endcomment -%}
-{%- assign bal_len = balance_sats | size -%}
+{%- assign total_sats = p.all_time_reward | default: 0 | times: 100000000 | round | number_with_delimiter: sep_t, sep_d -%}
+{%- assign today_sats = p.today_reward | default: 0 | times: 100000000 | round | number_with_delimiter: sep_t, sep_d -%}
+{%- comment -%} Velikost písma podle délky čísla (počet znaků vč. oddělovačů), ať se vejde do sloupce {%- endcomment -%}
 {%- assign today_len = today_sats | size -%}
 
-{%- comment -%} Stav workerů {%- endcomment -%}
+{%- comment -%}
+  Stav workerů. Jeden worker → slovně (Online / Offline / Nízký výkon),
+  víc workerů → počty s kontextem, např. „3/12 offline · 1 slabý“.
+{%- endcomment -%}
 {%- assign w_ok = p.ok_workers | default: 0 -%}
 {%- assign w_low = p.low_workers | default: 0 -%}
 {%- assign w_off = p.off_workers | default: 0 -%}
 {%- assign w_alive = w_ok | plus: w_low -%}
+{%- assign w_total = w_alive | plus: w_off -%}
+{%- assign status_bad = true -%}
 {%- if has_profile == false -%}
-  {%- assign status_text = "API nedostupné" -%}{%- assign status_bad = true -%}
-{%- elsif w_off > 0 and w_alive == 0 -%}
-  {%- assign status_text = "Offline" -%}{%- assign status_bad = true -%}
-{%- elsif w_off > 0 -%}
-  {%- assign status_text = w_off | append: " offline" -%}{%- assign status_bad = true -%}
-{%- elsif w_low > 0 -%}
-  {%- assign status_text = "Nízký výkon" -%}{%- assign status_bad = true -%}
-{%- elsif w_ok > 0 -%}
-  {%- assign status_text = "Online" -%}{%- assign status_bad = false -%}
+  {%- assign status_text = t_api_down -%}
+{%- elsif w_total == 0 -%}
+  {%- assign status_text = t_no_workers -%}
+{%- elsif w_alive == 0 -%}
+  {%- assign status_text = t_offline -%}
+{%- elsif w_off == 0 and w_low == 0 -%}
+  {%- assign status_text = t_online -%}{%- assign status_bad = false -%}
+{%- elsif w_total == 1 -%}
+  {%- assign status_text = t_low -%}
 {%- else -%}
-  {%- assign status_text = "Žádný worker" -%}{%- assign status_bad = true -%}
+  {%- capture status_text -%}
+    {%- if w_off > 0 -%}{{ w_off }}/{{ w_total }} offline{%- endif -%}
+    {%- if w_off > 0 and w_low > 0 %} · {% endif -%}
+    {%- if w_low > 0 -%}{% if w_off == 0 %}{{ w_low }}/{{ w_total }} {{ t_low_short }}{% else %}{{ w_low }} {{ t_low_short }}{% endif %}{%- endif -%}
+  {%- endcapture -%}
 {%- endif -%}
 
 {%- comment -%}
@@ -52,23 +122,22 @@
 {%- endcomment -%}
 {%- assign empty_list = "" | split: "," -%}
 {%- if IDX_1.lightning == nil and IDX_1.onchain == nil -%}
-  {%- assign no_payout_text = "Bez dat" -%}{%- assign no_payout_short = "Bez dat" -%}
+  {%- assign no_payout_text = t_no_data -%}{%- assign no_payout_short = t_no_data -%}
 {%- else -%}
-  {%- assign no_payout_text = "Žádná za posledních 90 dní" -%}{%- assign no_payout_short = "Žádná za 90 dní" -%}
+  {%- assign no_payout_text = t_no_payout -%}{%- assign no_payout_short = t_no_payout_short -%}
 {%- endif -%}
 {%- assign pay_ln = IDX_1.lightning | default: empty_list -%}
 {%- assign pay_oc = IDX_1.onchain | default: empty_list -%}
 {%- assign payouts = pay_ln | concat: pay_oc | sort: "requested_at_ts" -%}
 {%- assign last_payout = payouts | last -%}
 {%- if last_payout -%}
-  {%- assign lp_raw = last_payout.amount_sats | default: 0 -%}
-  {%- assign lp_sats = lp_raw | number_with_delimiter: " ", "," -%}
+  {%- assign lp_sats = last_payout.amount_sats | default: 0 | number_with_delimiter: sep_t, sep_d -%}
   {%- assign lp_len = lp_sats | size -%}
-  {%- assign lp_date = last_payout.requested_at_ts | plus: trmnl.user.utc_offset | date: "%-d. %-m. %Y" -%}
+  {%- assign lp_date = last_payout.requested_at_ts | plus: trmnl.user.utc_offset | date: fmt_date -%}
   {%- case last_payout.status -%}
-    {%- when "confirmed" -%}{%- assign lp_status = "Potvrzena" -%}
-    {%- when "queued" -%}{%- assign lp_status = "Ve frontě" -%}
-    {%- when "failed" -%}{%- assign lp_status = "Selhala" -%}
+    {%- when "confirmed" -%}{%- assign lp_status = t_confirmed -%}
+    {%- when "queued" -%}{%- assign lp_status = t_queued -%}
+    {%- when "failed" -%}{%- assign lp_status = t_failed -%}
     {%- else -%}{%- assign lp_status = last_payout.status | default: "?" -%}
   {%- endcase -%}
 {%- endif -%}
@@ -86,7 +155,7 @@
   {%- if v > rw_max -%}{%- assign rw_max = v -%}{%- endif -%}
 {%- endfor -%}
 {%- if rewards.size > 0 -%}
-  {%- assign rw_avg = rw_sum | divided_by: rewards.size -%}
+  {%- assign rw_avg = rw_sum | divided_by: rewards.size | number_with_delimiter: sep_t, sep_d -%}
 {%- endif -%}
 
 {%- assign chart_offset = 0 -%}{%- if rewards.size > 14 -%}{%- assign chart_offset = rewards.size | minus: 14 -%}{%- endif -%}
@@ -108,9 +177,9 @@
 </div>
 {%- assign first_day = rewards[chart_offset] -%}{%- assign last_day = rewards | last -%}
 <div class="flex flex--row flex--between stretch-x">
-  <span class="label label--small label--gray">{{ first_day.date | plus: trmnl.user.utc_offset | date: "%-d. %-m." }}</span>
-  <span class="label label--small label--gray">• výplata</span>
-  <span class="label label--small label--gray">{{ last_day.date | plus: trmnl.user.utc_offset | date: "%-d. %-m." }}</span>
+  <span class="label label--small label--gray">{{ first_day.date | plus: trmnl.user.utc_offset | date: fmt_date_short }}</span>
+  <span class="label label--small label--gray">• {{ t_payout_mark }}</span>
+  <span class="label label--small label--gray">{{ last_day.date | plus: trmnl.user.utc_offset | date: fmt_date_short }}</span>
 </div>
 </div>
 {%- endcapture -%}
@@ -133,16 +202,16 @@
 </div>
 {%- assign first_day = rewards[chart_offset] -%}{%- assign last_day = rewards | last -%}
 <div class="flex flex--row flex--between stretch-x">
-  <span class="label label--small label--gray">{{ first_day.date | plus: trmnl.user.utc_offset | date: "%-d. %-m." }}</span>
-  <span class="label label--small label--gray">• výplata</span>
-  <span class="label label--small label--gray">{{ last_day.date | plus: trmnl.user.utc_offset | date: "%-d. %-m." }}</span>
+  <span class="label label--small label--gray">{{ first_day.date | plus: trmnl.user.utc_offset | date: fmt_date_short }}</span>
+  <span class="label label--small label--gray">• {{ t_payout_mark }}</span>
+  <span class="label label--small label--gray">{{ last_day.date | plus: trmnl.user.utc_offset | date: fmt_date_short }}</span>
 </div>
 </div>
 {%- endcapture -%}
 {%- comment -%} Braiins symbol (design.braiins.com/braiins/logos/braiins-symbol), černá varianta {%- endcomment -%}
 {%- capture braiins_logo -%}data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 864 864'%3E%3Cpolygon points='345.6 864 345.6 682.76 194.4 179.9 194.4 0 0 0 0 179.9 151.2 682.76 151.2 864 345.6 864'/%3E%3Cpolygon points='864 864 864 682.76 712.8 179.9 712.8 0 518.4 0 518.4 179.9 669.6 682.76 669.6 864 864 864'/%3E%3C/svg%3E{%- endcapture -%}
 {%- assign instance = trmnl.plugin_settings.instance_name | default: "Braiins Pool" -%}
-{%- comment -%} Čísla se nesmí zalomit uprostřed (oddělovač tisíců je mezera) {%- endcomment -%}
+{%- comment -%} Čísla se nesmí zalomit uprostřed (oddělovač tisíců může být mezera) {%- endcomment -%}
 <style>
   .bp-nw { white-space: nowrap; }
   .bp-top { align-items: start; }

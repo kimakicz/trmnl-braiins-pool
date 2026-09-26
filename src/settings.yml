@@ -38,8 +38,18 @@ custom_fields:
 - keyname: pool_token
   field_type: password
   name: Braiins Pool API token
-  description: Settings → Access Profiles → Allow access to web APIs → Generate New token
+  description: "Braiins Pool: Settings → Access Profiles → Allow access to web APIs → Generate New token (read-only)"
   optional: false
+- keyname: language
+  field_type: select
+  name: Language / Jazyk
+  description: Auto = Czech for Czech locale, English otherwise
+  options:
+  - Auto
+  - English
+  - Čeština
+  default: Auto
+  optional: true
 name: Braiins Miner
-description: Hashrate a výplaty z Braiins Pool
+description: Braiins Pool hashrate and payouts
 refresh_interval: 15

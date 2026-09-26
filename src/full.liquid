@@ -1,21 +1,21 @@
 <div class="layout layout--col layout--stretch-x gap--space-between">
   <div class="grid grid--cols-5 bp-top">
     <div class="col--span-2 flex flex--col flex--left">
-      <span class="label">Dnes vytěženo</span>
+      <span class="label">{{ t_today }}</span>
       <div class="flex flex--row flex--bottom gap--small">
         {% if has_profile %}
-          <span class="value {% if today_len <= 5 %}value--xxxlarge{% elsif today_len <= 7 %}value--xxlarge{% else %}value--xlarge{% endif %} value--tnums bp-nw">{{ today_sats }}</span>
+          <span class="value {% if today_len <= 3 %}value--xxxlarge{% elsif today_len <= 5 %}value--xxlarge{% elsif today_len <= 7 %}value--xlarge{% else %}value--large{% endif %} value--tnums bp-nw">{{ today_sats }}</span>
           <span class="value value--base">sats</span>
         {% else %}
-          <span class="value value--xlarge">Bez dat</span>
+          <span class="value value--xlarge">{{ t_no_data }}</span>
         {% endif %}
       </div>
     </div>
     <div class="col--span-2 flex flex--col flex--left">
-      <span class="label">Poslední výplata</span>
+      <span class="label">{{ t_last_payout }}</span>
       {% if last_payout %}
         <div class="flex flex--row flex--bottom gap--small">
-          <span class="value {% if lp_len <= 5 %}value--xxxlarge{% elsif lp_len <= 7 %}value--xxlarge{% else %}value--xlarge{% endif %} value--tnums bp-nw">{{ lp_sats }}</span>
+          <span class="value {% if lp_len <= 3 %}value--xxxlarge{% elsif lp_len <= 5 %}value--xxlarge{% elsif lp_len <= 7 %}value--xlarge{% else %}value--large{% endif %} value--tnums bp-nw">{{ lp_sats }}</span>
           <span class="value value--base">sats</span>
         </div>
         <span class="label label--gray">{{ lp_date }} · {{ lp_status }}</span>
@@ -26,11 +26,11 @@
     </div>
     <div class="flex flex--col flex--right gap--small">
       <span class="label {% if status_bad %}label--inverted{% else %}label--outline{% endif %}">{{ status_text }}</span>
-      <span class="value value--small value--tnums bp-nw">{% if has_profile %}{{ hr_24h }} TH/s{% else %}–{% endif %}</span>
-      <span class="label label--small label--gray">Hashrate 24 h</span>
+      <span class="value value--small value--tnums bp-nw">{% if has_profile %}{{ hr_24h }} {{ hr_label }}{% else %}–{% endif %}</span>
+      <span class="label label--small label--gray">{{ t_hr24 }}</span>
       {% if has_profile %}
         <span class="value value--small value--tnums bp-nw bp-gap-top">{{ total_sats }} sats</span>
-        <span class="label label--small label--gray">Celkem vytěženo</span>
+        <span class="label label--small label--gray">{{ t_total }}</span>
       {% endif %}
     </div>
   </div>
@@ -38,8 +38,8 @@
   {% if rewards.size > 0 %}
   <div class="bp-grow gap--small">
     <div class="flex flex--row flex--between stretch-x">
-      <span class="label">Denní odměny</span>
-      <span class="label label--gray bp-nw">Ø {{ rw_avg }} sats/den</span>
+      <span class="label">{{ t_daily }}</span>
+      <span class="label label--gray bp-nw">Ø {{ rw_avg }} {{ t_per_day }}</span>
     </div>
     {{ reward_chart_14 }}
   </div>
