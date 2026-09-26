@@ -28,6 +28,10 @@
       <span class="label {% if status_bad %}label--inverted{% else %}label--outline{% endif %}">{{ status_text }}</span>
       <span class="value value--small value--tnums bp-nw">{% if has_profile %}{{ hr_24h }} TH/s{% else %}–{% endif %}</span>
       <span class="label label--small label--gray">Hashrate 24 h</span>
+      {% if has_profile %}
+        <span class="value value--small value--tnums bp-nw bp-gap-top">{{ total_sats }} sats</span>
+        <span class="label label--small label--gray">Celkem vytěženo</span>
+      {% endif %}
     </div>
   </div>
 

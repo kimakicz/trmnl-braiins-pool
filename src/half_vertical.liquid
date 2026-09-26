@@ -1,7 +1,10 @@
 <div class="layout layout--col layout--stretch-x gap--medium">
-  <div class="flex flex--row flex--between stretch-x">
+  <div class="flex flex--row flex--between flex--top stretch-x">
     <span class="label {% if status_bad %}label--inverted{% else %}label--outline{% endif %}">{{ status_text }}</span>
-    <span class="label label--gray bp-nw">24 h: {% if has_profile %}{{ hr_24h }} TH/s{% else %}–{% endif %}</span>
+    <div class="flex flex--col flex--right">
+      <span class="label label--gray bp-nw">24 h: {% if has_profile %}{{ hr_24h }} TH/s{% else %}–{% endif %}</span>
+      {% if has_profile %}<span class="label label--gray bp-nw">Celkem: {{ total_sats }} sats</span>{% endif %}
+    </div>
   </div>
   <div class="flex flex--col flex--left">
     <span class="label">Dnes vytěženo</span>

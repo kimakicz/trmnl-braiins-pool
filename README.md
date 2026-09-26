@@ -6,6 +6,7 @@ těžícího na [Braiins Pool](https://pool.braiins.com). Data bere z webového 
 - **Dnes vytěženo** a **poslední výplata** (částka, datum, stav) jako hlavní čísla. Částky jsou v sats.
 - **Denní odměny za 14 dní**: sloupcový graf (osa od nuly, propad = výpadek mineru) s tečkami ve dnech výplat.
 - **Hashrate**: 24h průměr v TH/s a stav workerů (Online / Offline / Nízký výkon).
+- **Celkem vytěženo**: `all_time_reward` z profilu v sats.
 
 Layouty: `full`, `half_horizontal`, `half_vertical`, `quadrant` (mashupy).
 
