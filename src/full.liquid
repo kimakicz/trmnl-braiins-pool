@@ -2,9 +2,9 @@
   <div class="grid grid--cols-5 bp-top">
     <div class="col--span-2 flex flex--col flex--left">
       <span class="label">{{ t_today }}</span>
-      <div class="flex flex--row flex--bottom gap--small">
+      <div class="flex flex--row flex--bottom gap--small bp-fitrow">
         {% if has_profile %}
-          <span class="value {% if today_len <= 3 %}value--xxxlarge{% elsif today_len <= 5 %}value--xxlarge{% elsif today_len <= 7 %}value--xlarge{% else %}value--large{% endif %} value--tnums bp-nw">{{ today_sats }}</span>
+          <div class="bp-fitbox"><span class="value {% if today_len <= 3 %}value--xxxlarge{% elsif today_len <= 5 %}value--xxlarge{% elsif today_len <= 7 %}value--xlarge{% else %}value--large{% endif %} value--tnums bp-nw" data-value-fit="true">{{ today_sats }}</span></div>
           <span class="value value--base">sats</span>
         {% else %}
           <span class="value value--xlarge">{{ t_no_data }}</span>
@@ -14,23 +14,23 @@
     <div class="col--span-2 flex flex--col flex--left">
       <span class="label">{{ t_last_payout }}</span>
       {% if last_payout %}
-        <div class="flex flex--row flex--bottom gap--small">
-          <span class="value {% if lp_len <= 3 %}value--xxxlarge{% elsif lp_len <= 5 %}value--xxlarge{% elsif lp_len <= 7 %}value--xlarge{% else %}value--large{% endif %} value--tnums bp-nw">{{ lp_sats }}</span>
+        <div class="flex flex--row flex--bottom gap--small bp-fitrow">
+          <div class="bp-fitbox"><span class="value {% if lp_len <= 3 %}value--xxxlarge{% elsif lp_len <= 5 %}value--xxlarge{% elsif lp_len <= 7 %}value--xlarge{% else %}value--large{% endif %} value--tnums bp-nw" data-value-fit="true">{{ lp_sats }}</span></div>
           <span class="value value--base">sats</span>
         </div>
-        <span class="label label--gray">{{ lp_date }} · {{ lp_status }}</span>
+        <span class="label bp-muted">{{ lp_date }} · {{ lp_status }}</span>
       {% else %}
         <span class="value value--xlarge">–</span>
-        <span class="label label--gray">{{ no_payout_text }}</span>
+        <span class="label bp-muted">{{ no_payout_text }}</span>
       {% endif %}
     </div>
     <div class="flex flex--col flex--right gap--small">
       <span class="label {% if status_bad %}label--inverted{% else %}label--outline{% endif %}">{{ status_text }}</span>
       <span class="value value--small value--tnums bp-nw">{% if has_profile %}{{ hr_24h }} {{ hr_label }}{% else %}–{% endif %}</span>
-      <span class="label label--small label--gray">{{ t_hr24 }}</span>
+      <span class="label label--small bp-muted">{{ t_hr24 }}</span>
       {% if has_profile %}
         <span class="value value--small value--tnums bp-nw bp-gap-top">{{ total_sats }} sats</span>
-        <span class="label label--small label--gray">{{ t_total }}</span>
+        <span class="label label--small bp-muted">{{ t_total }}</span>
       {% endif %}
     </div>
   </div>
@@ -39,7 +39,7 @@
   <div class="bp-grow gap--small">
     <div class="flex flex--row flex--between stretch-x">
       <span class="label">{{ t_daily }}</span>
-      <span class="label label--gray bp-nw">Ø {{ rw_avg }} {{ t_per_day }}</span>
+      <span class="label bp-muted bp-nw">Ø {{ rw_avg }} {{ t_per_day }}</span>
     </div>
     {{ reward_chart_14 }}
   </div>

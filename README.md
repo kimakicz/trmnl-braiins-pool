@@ -1,6 +1,6 @@
 # TRMNL plugin: Braiins Miner
 
-Private plugin pro [TRMNL](https://trmnl.com) (laděno na **TRMNL X**). Zobrazuje stav mineru
+Private plugin pro [TRMNL](https://trmnl.com), laděný na **TRMNL X** a ověřený i na původním TRMNL (800×480, 1bit). Zobrazuje stav mineru
 těžícího na [Braiins Pool](https://pool.braiins.com). Data bere z webového API poolu, ne z lokálního API mineru.
 
 - **Dnes vytěženo** a **poslední výplata** (částka, datum, stav) jako hlavní čísla. Částky jsou v sats.
@@ -60,7 +60,7 @@ V preview zvol model **TRMNL X** a paletu **16 Grays**.
 Pomocné skripty:
 
 - `bin/serve`: spustí `trmnlp serve` s `TZ=UTC`. TRMNL servery běží v UTC a šablona posouvá datum přes `trmnl.user.utc_offset`.
-- `bin/shot [view] [out.png] [palette]`: screenshot přes headless Chrome v rozlišení TRMNL X (1872×1404, `screen--v2 screen--lg screen--density-2x screen--4bit`).
+- `[MODEL=x|og] bin/shot [view] [out.png] [palette]`: screenshot přes headless Chrome. `MODEL=x` (výchozí) = TRMNL X (1872×1404, 4bit), `MODEL=og` = původní TRMNL (800×480, 1bit).
 - `bin/scenario <name>`: podstrčí běžícímu serveru data z `fixtures/scenarios/` (offline miner, žádné výplaty, selhaná výplata, výpadek API, farma s více workery `farm_multi_worker`, velká farma v PH/s `farm_large`…). Návrat k živým datům: `bin/scenario --live`.
 
 `fixtures/profile.json`, `fixtures/payouts.json` a `fixtures/rewards.json` jsou anonymizované reálné odpovědi API.

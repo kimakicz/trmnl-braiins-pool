@@ -1,14 +1,20 @@
 #!/usr/bin/env bash
-# Screenshot běžícího trmnlp preview v rozlišení TRMNL X (1872×1404, density 2x, 4bit).
-# Použití: bin/shot [view] [out.png] [palette-class]
+# Screenshot běžícího trmnlp preview.
+# Použití: [MODEL=x|og] bin/shot [view] [out.png] [palette-class]
+#   MODEL=x  (výchozí) TRMNL X: 1872×1404, screen--v2 screen--lg screen--density-2x, paleta screen--4bit
+#   MODEL=og původní TRMNL: 800×480, screen--og screen--md screen--density-1x, paleta screen--1bit
 set -euo pipefail
-VIEW="${1:-full}"; OUT="${2:-_build/$VIEW.png}"; PAL="${3:-screen--4bit}"
-CLASSES="screen $PAL screen--v2 screen--lg screen--density-2x"
-URL="http://127.0.0.1:4567/render/$VIEW.html?screen_classes=$(python3 -c 'import sys,urllib.parse;print(urllib.parse.quote(sys.argv[1]))' "$CLASSES")"
+VIEW="${1:-full}"; OUT="${2:-_build/$VIEW.png}"
+case "${MODEL:-x}" in
+  og) PAL="${3:-screen--1bit}"; DEV="screen--og screen--md screen--density-1x"; W=${W:-800};  H=${H:-480} ;;
+  *)  PAL="${3:-screen--4bit}"; DEV="screen--v2 screen--lg screen--density-2x"; W=${W:-1872}; H=${H:-1404} ;;
+esac
+CLASSES="screen $PAL $DEV"
+URL="http://127.0.0.1:4567/render/$VIEW.html?screen_classes=$(python3 -c 'import sys,urllib.parse;print(urllib.parse.quote(sys.argv[1]))' "$CLASSES")&width=$W&height=$H"
 mkdir -p "$(dirname "$OUT")"
 "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless=new --disable-gpu --hide-scrollbars \
-  --window-size=${W:-1872},${H:-1404} --force-device-scale-factor=1 --virtual-time-budget=4000 \
+  --window-size=$W,$H --force-device-scale-factor=1 --virtual-time-budget=4000 \
   --screenshot="$OUT" "$URL" >/dev/null 2>&1
 echo "$OUT"
-# zmenšený náhled pro rychlou kontrolu
-sips -Z 1040 "$OUT" --out "${OUT%.png}_small.png" >/dev/null
+# zmenšený náhled pro rychlou kontrolu (u OG je obrázek už malý)
+if [ "$W" -gt 1040 ]; then sips -Z 1040 "$OUT" --out "${OUT%.png}_small.png" >/dev/null; else cp "$OUT" "${OUT%.png}_small.png"; fi

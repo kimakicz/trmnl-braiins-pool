@@ -177,9 +177,9 @@
 </div>
 {%- assign first_day = rewards[chart_offset] -%}{%- assign last_day = rewards | last -%}
 <div class="flex flex--row flex--between stretch-x">
-  <span class="label label--small label--gray">{{ first_day.date | plus: trmnl.user.utc_offset | date: fmt_date_short }}</span>
-  <span class="label label--small label--gray">• {{ t_payout_mark }}</span>
-  <span class="label label--small label--gray">{{ last_day.date | plus: trmnl.user.utc_offset | date: fmt_date_short }}</span>
+  <span class="label label--small bp-muted">{{ first_day.date | plus: trmnl.user.utc_offset | date: fmt_date_short }}</span>
+  <span class="label label--small bp-muted">• {{ t_payout_mark }}</span>
+  <span class="label label--small bp-muted">{{ last_day.date | plus: trmnl.user.utc_offset | date: fmt_date_short }}</span>
 </div>
 </div>
 {%- endcapture -%}
@@ -202,9 +202,9 @@
 </div>
 {%- assign first_day = rewards[chart_offset] -%}{%- assign last_day = rewards | last -%}
 <div class="flex flex--row flex--between stretch-x">
-  <span class="label label--small label--gray">{{ first_day.date | plus: trmnl.user.utc_offset | date: fmt_date_short }}</span>
-  <span class="label label--small label--gray">• {{ t_payout_mark }}</span>
-  <span class="label label--small label--gray">{{ last_day.date | plus: trmnl.user.utc_offset | date: fmt_date_short }}</span>
+  <span class="label label--small bp-muted">{{ first_day.date | plus: trmnl.user.utc_offset | date: fmt_date_short }}</span>
+  <span class="label label--small bp-muted">• {{ t_payout_mark }}</span>
+  <span class="label label--small bp-muted">{{ last_day.date | plus: trmnl.user.utc_offset | date: fmt_date_short }}</span>
 </div>
 </div>
 {%- endcapture -%}
@@ -214,7 +214,16 @@
 {%- comment -%} Čísla se nesmí zalomit uprostřed (oddělovač tisíců může být mezera) {%- endcomment -%}
 <style>
   .bp-nw { white-space: nowrap; }
+  /* Vedlejší popisky: šedé na 2/4bit, v 1bit černé (rastrovaná šeď je u malého písma nečitelná) */
+  .bp-muted { color: #666; }
+  .screen--1bit .bp-muted { color: #000; }
+  /* Malé displeje (OG 800×480): v half_vertical se graf nevejde */
+  .screen--md .bp-hide-md { display: none; }
   .bp-top { align-items: start; }
+  .bp-top > * { min-width: 0; }
+  /* Kontejner pro data-value-fit: smí se zúžit na dostupné místo vedle jednotky „sats" */
+  .bp-fitrow { width: 100%; justify-content: flex-start; }
+  .bp-fitbox { flex: 0 1 auto; min-width: 0; }
   .bp-gap-top { margin-top: 12px; }
   .bp-grow { flex: 0 0 auto; height: 42%; min-height: 0; display: flex; flex-direction: column; }
   .bp-grow--tall { height: 36%; }

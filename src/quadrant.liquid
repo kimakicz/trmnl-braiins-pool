@@ -2,18 +2,18 @@
   <div class="grid grid--cols-2 bp-top">
     <div class="flex flex--col flex--left">
       <span class="label label--small">{{ t_today }}</span>
-      <span class="value {% if today_len <= 5 %}value--xlarge{% elsif today_len <= 6 %}value--large{% else %}value--base{% endif %} value--tnums bp-nw">{% if has_profile %}{{ today_sats }}{% else %}–{% endif %}</span>
-      <span class="label label--small label--gray">sats</span>
+      <span class="value {% if today_len <= 5 %}value--xlarge{% elsif today_len <= 6 %}value--large{% else %}value--base{% endif %} value--tnums bp-nw" data-value-fit="true">{% if has_profile %}{{ today_sats }}{% else %}–{% endif %}</span>
+      <span class="label label--small bp-muted">sats</span>
     </div>
     <div class="flex flex--col flex--left">
       <span class="label label--small">{{ t_last_payout }}</span>
-      <span class="value {% if lp_len <= 5 %}value--xlarge{% elsif lp_len <= 6 %}value--large{% else %}value--base{% endif %} value--tnums bp-nw">{% if last_payout %}{{ lp_sats }}{% else %}–{% endif %}</span>
-      <span class="label label--small label--gray bp-nw">{% if last_payout %}sats · {{ lp_date }}{% if last_payout.status != "confirmed" %} · {{ lp_status }}{% endif %}{% else %}{{ no_payout_short }}{% endif %}</span>
+      <span class="value {% if lp_len <= 5 %}value--xlarge{% elsif lp_len <= 6 %}value--large{% else %}value--base{% endif %} value--tnums bp-nw" data-value-fit="true">{% if last_payout %}{{ lp_sats }}{% else %}–{% endif %}</span>
+      <span class="label label--small bp-muted bp-nw">{% if last_payout %}sats · {{ lp_date }}{% if last_payout.status != "confirmed" %} · {{ lp_status }}{% endif %}{% else %}{{ no_payout_short }}{% endif %}</span>
     </div>
   </div>
   <div class="flex flex--row flex--between stretch-x">
     <span class="label label--small {% if status_bad %}label--inverted{% else %}label--outline{% endif %}">{{ status_text }}</span>
-    <span class="label label--small label--gray bp-nw">{{ t_hr24_short }}: {% if has_profile %}{{ hr_24h }} {{ hr_label }}{% else %}–{% endif %}</span>
+    <span class="label label--small bp-muted bp-nw">{{ t_hr24_short }}: {% if has_profile %}{{ hr_24h }} {{ hr_label }}{% else %}–{% endif %}</span>
   </div>
 </div>
 
