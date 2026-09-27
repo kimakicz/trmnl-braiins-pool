@@ -37,6 +37,9 @@
   {%- assign t_confirmed = "Potvrzena" -%}
   {%- assign t_queued = "Ve frontě" -%}
   {%- assign t_failed = "Selhala" -%}
+  {%- assign t_estimated = "Odhad na dnes" -%}
+  {%- assign t_payouts_blocked = "Výplaty nejsou pro tento token dostupné" -%}
+  {%- assign t_payouts_blocked_short = "Bez přístupu k výplatám" -%}
 {%- else -%}
   {%- assign sep_t = "," -%}{%- assign sep_d = "." -%}
   {%- assign fmt_date = "%b %-d, %Y" -%}{%- assign fmt_date_short = "%b %-d" -%}
@@ -61,6 +64,9 @@
   {%- assign t_confirmed = "Confirmed" -%}
   {%- assign t_queued = "Queued" -%}
   {%- assign t_failed = "Failed" -%}
+  {%- assign t_estimated = "Estimated today" -%}
+  {%- assign t_payouts_blocked = "Payouts not available for this token" -%}
+  {%- assign t_payouts_blocked_short = "No payout access" -%}
 {%- endif -%}
 
 {%- assign p = IDX_0.btc -%}
@@ -84,6 +90,8 @@
 
 {%- comment -%} BTC strings → sats {%- endcomment -%}
 {%- assign total_sats = p.all_time_reward | default: 0 | times: 100000000 | round | number_with_delimiter: sep_t, sep_d -%}
+{%- assign est_sats = p.estimated_reward | default: 0 | times: 100000000 | round | number_with_delimiter: sep_t, sep_d -%}
+{%- assign est_len = est_sats | size -%}
 {%- assign today_sats = p.today_reward | default: 0 | times: 100000000 | round | number_with_delimiter: sep_t, sep_d -%}
 {%- comment -%} Font size by number length (characters incl. separators) so it fits its column {%- endcomment -%}
 {%- assign today_len = today_sats | size -%}
@@ -121,6 +129,13 @@
   The API returns items in ascending order (oldest first), so `last` is correct even without sort.
 {%- endcomment -%}
 {%- assign empty_list = "" | split: "," -%}
+{%- comment -%}
+  A "Limited read-only" access profile gets HTTP 401 "Payout history access is not allowed."
+  from the payouts endpoint while everything else works. If the profile arrived but payouts did not,
+  treat payouts as blocked and show the estimated reward for today instead.
+{%- endcomment -%}
+{%- assign payouts_blocked = false -%}
+{%- if has_profile and IDX_1.lightning == nil and IDX_1.onchain == nil -%}{%- assign payouts_blocked = true -%}{%- endif -%}
 {%- if IDX_1.lightning == nil and IDX_1.onchain == nil -%}
   {%- assign no_payout_text = t_no_data -%}{%- assign no_payout_short = t_no_data -%}
 {%- else -%}
@@ -178,7 +193,7 @@
 {%- assign first_day = rewards[chart_offset] -%}{%- assign last_day = rewards | last -%}
 <div class="flex flex--row flex--between stretch-x">
   <span class="label label--small bp-muted">{{ first_day.date | plus: trmnl.user.utc_offset | date: fmt_date_short }}</span>
-  <span class="label label--small bp-muted">• {{ t_payout_mark }}</span>
+  <span class="label label--small bp-muted">{% unless payouts_blocked %}• {{ t_payout_mark }}{% endunless %}</span>
   <span class="label label--small bp-muted">{{ last_day.date | plus: trmnl.user.utc_offset | date: fmt_date_short }}</span>
 </div>
 </div>
@@ -203,7 +218,7 @@
 {%- assign first_day = rewards[chart_offset] -%}{%- assign last_day = rewards | last -%}
 <div class="flex flex--row flex--between stretch-x">
   <span class="label label--small bp-muted">{{ first_day.date | plus: trmnl.user.utc_offset | date: fmt_date_short }}</span>
-  <span class="label label--small bp-muted">• {{ t_payout_mark }}</span>
+  <span class="label label--small bp-muted">{% unless payouts_blocked %}• {{ t_payout_mark }}{% endunless %}</span>
   <span class="label label--small bp-muted">{{ last_day.date | plus: trmnl.user.utc_offset | date: fmt_date_short }}</span>
 </div>
 </div>

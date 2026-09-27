@@ -40,8 +40,20 @@ API behavior (verified on Sep 25, 2026):
 
 ### 1. Braiins Pool token
 
-In Braiins Pool, open **Settings → Access Profiles**, enable **Allow access to web APIs** and click **Generate New token**.
-The token is read-only.
+In Braiins Pool, open **Settings → Access Profiles**, create a profile, enable **Allow access to web APIs** and click
+**Generate New token**. Pick the permission level of the profile:
+
+| Access profile | Plugin | What you get |
+|---|---|---|
+| **Read-only** (recommended) | full functionality | everything, including the last payout and payout dots in the chart |
+| **Limited read-only** | works, without payouts | the payouts endpoint returns HTTP 401 "Payout history access is not allowed.", so the plugin shows **Estimated today** (`estimated_reward`) instead of the last payout and the chart has no payout dots |
+| Full access | works | not needed – never give the plugin more access than read-only |
+
+Verified on Sep 27, 2026 by calling every endpoint with both tokens: profile, daily rewards, workers and daily hashrate
+return identical data for Read-only and Limited read-only; only payout history is blocked.
+
+How the plugin detects a limited token: if the profile arrived but the payouts response has neither `lightning`
+nor `onchain`, payouts are treated as blocked. If the whole API is down, the plugin shows "API unavailable" instead.
 
 ### 2. Local development (trmnlp)
 
@@ -65,7 +77,7 @@ Helper scripts:
 
 - `bin/serve`: runs `trmnlp serve` with `TZ=UTC`. TRMNL servers run in UTC and the template shifts dates via `trmnl.user.utc_offset`.
 - `[MODEL=x|og] bin/shot [view] [out.png] [palette]`: screenshot via headless Chrome. `MODEL=x` (default) = TRMNL X (1872×1404, 4-bit), `MODEL=og` = original TRMNL (800×480, 1-bit).
-- `bin/scenario <name>`: feeds the running server with data from `fixtures/scenarios/` (offline miner, no payouts, failed payout, API outage, multi-worker farm `farm_multi_worker`, large PH/s farm `farm_large`…). Back to live data: `bin/scenario --live`.
+- `bin/scenario <name>`: feeds the running server with data from `fixtures/scenarios/` (offline miner, no payouts, failed payout, API outage, multi-worker farm `farm_multi_worker`, large PH/s farm `farm_large`, Limited read-only token `limited_token`…). Back to live data: `bin/scenario --live`.
 
 `fixtures/profile.json`, `fixtures/payouts.json` and `fixtures/rewards.json` are anonymized real API responses.
 
@@ -120,7 +132,10 @@ Laděný na TRMNL X, funguje i na původním TRMNL. Data bere z webového API po
 
 **Nastavení:**
 
-1. V Braiins Pool otevři **Settings → Access Profiles**, zapni **Allow access to web APIs** a vygeneruj token (**Generate New token**). Token je jen pro čtení.
+1. V Braiins Pool otevři **Settings → Access Profiles**, vytvoř profil, zapni **Allow access to web APIs** a vygeneruj token (**Generate New token**).
+   - **Read-only** (doporučeno): plná funkčnost včetně poslední výplaty.
+   - **Limited read-only**: funguje taky, ale Braiins k němu nepustí historii výplat. Místo poslední výplaty se proto zobrazí **Odhad na dnes** a graf nemá tečky výplat.
+   - **Full access** plugin nepotřebuje, nedávej mu víc než read-only.
 2. Přidej plugin v TRMNL a do nastavení vlož **Braiins Pool API token**.
 3. V poli **Language / Jazyk** zvol **Čeština** (nebo `Auto`, které češtinu zvolí podle jazyka účtu).
 4. Přidej plugin do playlistu. Data se obnovují každých 15 minut.

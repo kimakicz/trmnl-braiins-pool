@@ -12,16 +12,25 @@
       {% endif %}
     </div>
     <div class="col--span-2 flex flex--col flex--left">
-      <span class="label">{{ t_last_payout }}</span>
-      {% if last_payout %}
-        <div class="flex flex--row flex--bottom gap--small bp-fitrow">
-          <div class="bp-fitbox"><span class="value {% if lp_len <= 3 %}value--xxxlarge{% elsif lp_len <= 5 %}value--xxlarge{% elsif lp_len <= 7 %}value--xlarge{% else %}value--large{% endif %} value--tnums bp-nw" data-value-fit="true">{{ lp_sats }}</span></div>
-          <span class="value value--small">sats</span>
-        </div>
-        <span class="label bp-muted">{{ lp_date }} · {{ lp_status }}</span>
+      {% if payouts_blocked %}
+      <span class="label">{{ t_estimated }}</span>
+      <div class="flex flex--row flex--bottom gap--small bp-fitrow">
+        <div class="bp-fitbox"><span class="value {% if est_len <= 3 %}value--xxxlarge{% elsif est_len <= 5 %}value--xxlarge{% elsif est_len <= 7 %}value--xlarge{% else %}value--large{% endif %} value--tnums bp-nw" data-value-fit="true">~{{ est_sats }}</span></div>
+        <span class="value value--small">sats</span>
+      </div>
+      <span class="label bp-muted">{{ t_payouts_blocked }}</span>
       {% else %}
-        <span class="value value--large">–</span>
-        <span class="label bp-muted">{{ no_payout_short }}</span>
+        <span class="label">{{ t_last_payout }}</span>
+        {% if last_payout %}
+          <div class="flex flex--row flex--bottom gap--small bp-fitrow">
+            <div class="bp-fitbox"><span class="value {% if lp_len <= 3 %}value--xxxlarge{% elsif lp_len <= 5 %}value--xxlarge{% elsif lp_len <= 7 %}value--xlarge{% else %}value--large{% endif %} value--tnums bp-nw" data-value-fit="true">{{ lp_sats }}</span></div>
+            <span class="value value--small">sats</span>
+          </div>
+          <span class="label bp-muted">{{ lp_date }} · {{ lp_status }}</span>
+        {% else %}
+          <span class="value value--large">–</span>
+          <span class="label bp-muted">{{ no_payout_short }}</span>
+        {% endif %}
       {% endif %}
     </div>
     <div class="flex flex--col flex--right gap--small">

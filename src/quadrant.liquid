@@ -6,9 +6,15 @@
       <span class="label label--small bp-muted">sats</span>
     </div>
     <div class="flex flex--col flex--left">
-      <span class="label label--small">{{ t_last_payout }}</span>
-      <span class="value {% if lp_len <= 5 %}value--xlarge{% elsif lp_len <= 6 %}value--large{% else %}value--base{% endif %} value--tnums bp-nw" data-value-fit="true">{% if last_payout %}{{ lp_sats }}{% else %}–{% endif %}</span>
-      <span class="label label--small bp-muted bp-nw">{% if last_payout %}sats · {{ lp_date }}{% if last_payout.status != "confirmed" %} · {{ lp_status }}{% endif %}{% else %}{{ no_payout_short }}{% endif %}</span>
+      {% if payouts_blocked %}
+      <span class="label label--small">{{ t_estimated }}</span>
+      <span class="value {% if est_len <= 5 %}value--xlarge{% elsif est_len <= 6 %}value--large{% else %}value--base{% endif %} value--tnums bp-nw" data-value-fit="true">~{{ est_sats }}</span>
+      <span class="label label--small bp-muted bp-nw">sats · {{ t_payouts_blocked_short }}</span>
+      {% else %}
+        <span class="label label--small">{{ t_last_payout }}</span>
+        <span class="value {% if lp_len <= 5 %}value--xlarge{% elsif lp_len <= 6 %}value--large{% else %}value--base{% endif %} value--tnums bp-nw" data-value-fit="true">{% if last_payout %}{{ lp_sats }}{% else %}–{% endif %}</span>
+        <span class="label label--small bp-muted bp-nw">{% if last_payout %}sats · {{ lp_date }}{% if last_payout.status != "confirmed" %} · {{ lp_status }}{% endif %}{% else %}{{ no_payout_short }}{% endif %}</span>
+      {% endif %}
     </div>
   </div>
   <div class="flex flex--row flex--between stretch-x">
