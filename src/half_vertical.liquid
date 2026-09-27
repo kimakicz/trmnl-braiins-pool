@@ -9,7 +9,7 @@
   <div class="flex flex--col flex--left">
     <span class="label">{{ t_today }}</span>
     {% if has_profile %}
-      <div class="flex flex--row flex--bottom gap--small bp-fitrow">
+      <div class="flex flex--row flex--bottom gap--small flex--left bp-fitrow">
         <div class="bp-fitbox"><span class="value {% if today_len <= 5 %}value--xxlarge{% elsif today_len <= 7 %}value--xlarge{% else %}value--large{% endif %} value--tnums bp-nw" data-value-fit="true">{{ today_sats }}</span></div>
         <span class="value value--small">sats</span>
       </div>
@@ -20,7 +20,7 @@
   <div class="flex flex--col flex--left">
     {% if payouts_blocked %}
     <span class="label">{{ t_estimated }}</span>
-    <div class="flex flex--row flex--bottom gap--small bp-fitrow">
+    <div class="flex flex--row flex--bottom gap--small flex--left bp-fitrow">
       <div class="bp-fitbox"><span class="value {% if est_len <= 3 %}value--xxlarge{% elsif est_len <= 5 %}value--xxlarge{% elsif est_len <= 7 %}value--xlarge{% else %}value--large{% endif %} value--tnums bp-nw" data-value-fit="true">~{{ est_sats }}</span></div>
       <span class="value value--small">sats</span>
     </div>
@@ -28,7 +28,7 @@
     {% else %}
       <span class="label">{{ t_last_payout }}</span>
       {% if last_payout %}
-        <div class="flex flex--row flex--bottom gap--small bp-fitrow">
+        <div class="flex flex--row flex--bottom gap--small flex--left bp-fitrow">
           <div class="bp-fitbox"><span class="value {% if lp_len <= 5 %}value--xxlarge{% elsif lp_len <= 7 %}value--xlarge{% else %}value--large{% endif %} value--tnums bp-nw" data-value-fit="true">{{ lp_sats }}</span></div>
           <span class="value value--small">sats</span>
         </div>

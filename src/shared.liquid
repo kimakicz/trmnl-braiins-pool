@@ -69,7 +69,52 @@
   {%- assign t_payouts_blocked_short = "No payout access" -%}
 {%- endif -%}
 
-{%- assign p = IDX_0.btc -%}
+{%- comment -%}
+  Data sources. With the token set to "demo" the plugin renders built-in sample data instead of the API
+  (used by the published recipe master, which must not show anyone's real account). Dates are relative
+  to the current time so the demo always looks current.
+{%- endcomment -%}
+{%- assign token_value = trmnl.plugin_settings.custom_fields_values.pool_token | default: "" | strip | downcase -%}
+{%- assign demo_mode = false -%}
+{%- if token_value == "demo" -%}{%- assign demo_mode = true -%}{%- endif -%}
+{%- if demo_mode -%}
+  {%- assign now_ts = trmnl.system.timestamp_utc | default: 0 | plus: 0 -%}
+  {%- if now_ts == 0 -%}{%- assign now_ts = "now" | date: "%s" | plus: 0 -%}{%- endif -%}
+  {%- assign sec_of_day = now_ts | modulo: 86400 -%}
+  {%- assign day0 = now_ts | minus: sec_of_day -%}
+  {%- assign today_demo = sec_of_day | times: 160 | divided_by: 86400 -%}
+  {%- assign demo_daily = "158,161,157,163,160,98,155,159,162,158,160,157,161,159" | split: "," -%}
+  {%- capture demo_profile_json -%}
+    {"btc":{"hash_rate_unit":"Gh/s","hash_rate_5m":3480.2,"hash_rate_60m":3461.9,"hash_rate_24h":3452.7,
+    "ok_workers":3,"low_workers":0,"off_workers":0,"dis_workers":0,
+    "current_balance":"0.00000312","today_reward":{{ today_demo | divided_by: 100000000.0 }},
+    "estimated_reward":"0.00000160","all_time_reward":"0.00123456"}}
+  {%- endcapture -%}
+  {%- capture demo_payouts_json -%}
+    {"onchain":[],"lightning":[
+    {%- for k in (0..9) -%}
+      {%- assign ts = k | times: 3 | plus: 1 | times: 86400 | minus: 32400 -%}
+      {%- assign ts = day0 | minus: ts -%}
+      {"requested_at_ts":{{ ts }},"resolved_at_ts":{{ ts | plus: 400 }},"status":"confirmed","amount_sats":{{ 480 | plus: k }},"fee_sats":0}{% unless forloop.last %},{% endunless %}
+    {%- endfor -%}]}
+  {%- endcapture -%}
+  {%- capture demo_rewards_json -%}
+    {"btc":{"daily_rewards":[
+    {%- for i in (1..14) -%}
+      {%- assign idx = i | minus: 1 -%}
+      {"date":{{ i | times: 86400 | minus: day0 | times: -1 }},"total_reward":{{ demo_daily[idx] | plus: 0 | divided_by: 100000000.0 }}}{% unless forloop.last %},{% endunless %}
+    {%- endfor -%}]}}
+  {%- endcapture -%}
+  {%- assign src_profile = demo_profile_json | parse_json -%}
+  {%- assign src_payouts = demo_payouts_json | parse_json -%}
+  {%- assign src_rewards = demo_rewards_json | parse_json -%}
+{%- else -%}
+  {%- assign src_profile = IDX_0 -%}
+  {%- assign src_payouts = IDX_1 -%}
+  {%- assign src_rewards = IDX_2 -%}
+{%- endif -%}
+
+{%- assign p = src_profile.btc -%}
 {%- assign has_profile = false -%}
 {%- if p and p.hash_rate_5m != nil -%}{%- assign has_profile = true -%}{%- endif -%}
 
@@ -135,14 +180,14 @@
   treat payouts as blocked and show the estimated reward for today instead.
 {%- endcomment -%}
 {%- assign payouts_blocked = false -%}
-{%- if has_profile and IDX_1.lightning == nil and IDX_1.onchain == nil -%}{%- assign payouts_blocked = true -%}{%- endif -%}
-{%- if IDX_1.lightning == nil and IDX_1.onchain == nil -%}
+{%- if has_profile and src_payouts.lightning == nil and src_payouts.onchain == nil -%}{%- assign payouts_blocked = true -%}{%- endif -%}
+{%- if src_payouts.lightning == nil and src_payouts.onchain == nil -%}
   {%- assign no_payout_text = t_no_data -%}{%- assign no_payout_short = t_no_data -%}
 {%- else -%}
   {%- assign no_payout_text = t_no_payout -%}{%- assign no_payout_short = t_no_payout_short -%}
 {%- endif -%}
-{%- assign pay_ln = IDX_1.lightning | default: empty_list -%}
-{%- assign pay_oc = IDX_1.onchain | default: empty_list -%}
+{%- assign pay_ln = src_payouts.lightning | default: empty_list -%}
+{%- assign pay_oc = src_payouts.onchain | default: empty_list -%}
 {%- assign payouts = pay_ln | concat: pay_oc | sort: "requested_at_ts" -%}
 {%- assign last_payout = payouts | last -%}
 {%- if last_payout -%}
@@ -162,7 +207,7 @@
   Bar height in 5 % steps (classes bp-h-0…bp-h-100), axis always starts at zero.
   Dot under a bar = a payout was requested that day (UTC, same as the reward `date`).
 {%- endcomment -%}
-{%- assign rewards = IDX_2.btc.daily_rewards | default: empty_list | sort: "date" -%}
+{%- assign rewards = src_rewards.btc.daily_rewards | default: empty_list | sort: "date" -%}
 {%- assign rw_max = 1 -%}{%- assign rw_sum = 0 -%}
 {%- for d in rewards -%}
   {%- assign v = d.total_reward | times: 100000000 | round -%}
@@ -185,8 +230,8 @@
     {%- assign paid = false -%}
     {%- for x in payouts -%}{%- if x.requested_at_ts >= d.date and x.requested_at_ts < day_end -%}{%- assign paid = true -%}{%- endif -%}{%- endfor -%}
     <div class="bp-col">
-      <div class="bp-colarea"><div class="bp-colbar bp-h-{{ h }}"></div></div>
-      <div class="bp-mark">{% if paid %}<span class="bp-dot"></span>{% endif %}</div>
+      <div class="bp-colarea flex flex--row flex--center-x flex--bottom"><div class="bp-colbar bp-h-{{ h }}"></div></div>
+      <div class="bp-mark flex flex--row flex--center-x flex--center">{% if paid %}<span class="bp-dot rounded--full"></span>{% endif %}</div>
     </div>
   {%- endfor -%}
 </div>
@@ -210,8 +255,8 @@
     {%- assign paid = false -%}
     {%- for x in payouts -%}{%- if x.requested_at_ts >= d.date and x.requested_at_ts < day_end -%}{%- assign paid = true -%}{%- endif -%}{%- endfor -%}
     <div class="bp-col">
-      <div class="bp-colarea"><div class="bp-colbar bp-h-{{ h }}"></div></div>
-      <div class="bp-mark">{% if paid %}<span class="bp-dot"></span>{% endif %}</div>
+      <div class="bp-colarea flex flex--row flex--center-x flex--bottom"><div class="bp-colbar bp-h-{{ h }}"></div></div>
+      <div class="bp-mark flex flex--row flex--center-x flex--center">{% if paid %}<span class="bp-dot rounded--full"></span>{% endif %}</div>
     </div>
   {%- endfor -%}
 </div>
@@ -232,23 +277,29 @@
   /* Secondary labels: gray on 2/4-bit, black on 1-bit (dithered gray is unreadable at small sizes) */
   .bp-muted { color: #666; }
   .screen--1bit .bp-muted { color: #000; }
+  .bp-pair { display: flex; flex-direction: column; align-items: flex-end; }
+  /* Portrait: main numbers side by side, hashrate/total/status as a row below; quadrant stacked */
+  .screen--portrait .bp-main { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 16px; column-gap: 24px; }
+  .screen--portrait .bp-main > .col--span-2 { grid-column: span 1; }
+  .screen--portrait .bp-side { grid-column: 1 / -1; flex-direction: row; justify-content: space-between; align-items: flex-end; }
+  .screen--portrait .bp-side .bp-pair { align-items: flex-start; }
+  .screen--portrait .bp-quad { grid-template-columns: minmax(0, 1fr); row-gap: 12px; }
   /* Small screens (OG 800×480): the chart does not fit in half_vertical */
   .screen--md .bp-hide-md { display: none; }
   .bp-top { align-items: start; }
   .bp-top > * { min-width: 0; }
   /* data-value-fit container: may shrink to the space left next to the "sats" unit */
-  .bp-fitrow { width: 100%; justify-content: flex-start; }
+  .bp-fitrow { width: 100%; }
   .bp-fitbox { flex: 0 1 auto; min-width: 0; }
-  .bp-gap-top { margin-top: 12px; }
   .bp-grow { flex: 0 0 auto; height: 42%; min-height: 0; display: flex; flex-direction: column; }
   .bp-grow--tall { height: 36%; }
   .bp-chartbox { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; gap: 4px; }
   .bp-chart { flex: 1 1 auto; min-height: 60px; display: flex; align-items: stretch; gap: 0; }
   .bp-col { flex: 1 1 0; display: flex; flex-direction: column; }
-  .bp-colarea { flex: 1 1 auto; display: flex; align-items: flex-end; justify-content: center; border-bottom: 2px solid #000; }
+  .bp-colarea { flex: 1 1 auto; border-bottom: 2px solid #000; }
   .bp-colbar { width: 38%; background: #000; border-radius: 4px 4px 0 0; }
-  .bp-mark { height: 14px; display: flex; justify-content: center; align-items: center; }
-  .bp-dot { width: 8px; height: 8px; border-radius: 50%; background: #000; }
+  .bp-mark { height: 14px; }
+  .bp-dot { width: 8px; height: 8px; background: #000; }
   .bp-h-0 { height: 0%; }
   .bp-h-5 { height: 5%; }
   .bp-h-10 { height: 10%; }

@@ -1,5 +1,5 @@
 <div class="layout layout--col layout--stretch-x gap--medium">
-  <div class="grid grid--cols-2 bp-top">
+  <div class="grid grid--cols-2 bp-top bp-quad">
     <div class="flex flex--col flex--left">
       <span class="label label--small">{{ t_today }}</span>
       <span class="value {% if today_len <= 5 %}value--xlarge{% elsif today_len <= 6 %}value--large{% else %}value--base{% endif %} value--tnums bp-nw" data-value-fit="true">{% if has_profile %}{{ today_sats }}{% else %}–{% endif %}</span>

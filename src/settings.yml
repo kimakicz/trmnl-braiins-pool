@@ -35,10 +35,15 @@ oauth_expiry_field_name: ''
 oauth_expiry_strategy: ''
 oauth_fixed_expiry_ms: ''
 custom_fields:
+- keyname: author_bio
+  name: About This Plugin
+  field_type: author_bio
+  description: 'Shows today''s mined sats, your last payout, daily rewards for the last 14 days, 24h hashrate and worker status from <a href="https://pool.braiins.com">Braiins Pool</a>. Needs a Read-only API token (Settings → Access Profiles → Allow access to web APIs). Enter <b>demo</b> as the token to preview with sample data. Not affiliated with Braiins. Issues and source: <a href="https://github.com/kimakicz/trmnl-braiins-pool">github.com/kimakicz/trmnl-braiins-pool</a>.'
+  github_url: https://github.com/kimakicz
 - keyname: pool_token
   field_type: password
   name: Braiins Pool API token
-  description: 'Braiins Pool: Settings → Access Profiles → Allow access to web APIs → Generate New token (read-only)'
+  description: 'Braiins Pool: Settings → Access Profiles → Allow access to web APIs → Generate New token (read-only). Enter "demo" for sample data.'
   optional: false
 - keyname: language
   field_type: select

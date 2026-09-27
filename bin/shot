@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Screenshot of the running trmnlp preview.
-# Usage: [MODEL=x|og] bin/shot [view] [out.png] [palette-class]
+# Usage: [MODEL=x|og] [ORIENT=landscape|portrait] bin/shot [view] [out.png] [palette-class]
 #   MODEL=x  (default) TRMNL X: 1872×1404, screen--v2 screen--lg screen--density-2x, palette screen--4bit
 #   MODEL=og original TRMNL: 800×480, screen--og screen--md screen--density-1x, palette screen--1bit
 set -euo pipefail
@@ -9,6 +9,7 @@ case "${MODEL:-x}" in
   og) PAL="${3:-screen--1bit}"; DEV="screen--og screen--md screen--density-1x"; W=${W:-800};  H=${H:-480} ;;
   *)  PAL="${3:-screen--4bit}"; DEV="screen--v2 screen--lg screen--density-2x"; W=${W:-1872}; H=${H:-1404} ;;
 esac
+if [ "${ORIENT:-landscape}" = portrait ]; then DEV="$DEV screen--portrait"; T=$W; W=$H; H=$T; fi
 CLASSES="screen $PAL $DEV"
 URL="http://127.0.0.1:4567/render/$VIEW.html?screen_classes=$(python3 -c 'import sys,urllib.parse;print(urllib.parse.quote(sys.argv[1]))' "$CLASSES")&width=$W&height=$H"
 mkdir -p "$(dirname "$OUT")"
@@ -17,4 +18,4 @@ mkdir -p "$(dirname "$OUT")"
   --screenshot="$OUT" "$URL" >/dev/null 2>&1
 echo "$OUT"
 # downscaled copy for a quick look (the OG image is already small)
-if [ "$W" -gt 1040 ]; then sips -Z 1040 "$OUT" --out "${OUT%.png}_small.png" >/dev/null; else cp "$OUT" "${OUT%.png}_small.png"; fi
+if [ "$W" -gt 1040 ] || [ "$H" -gt 1040 ]; then sips -Z 1040 "$OUT" --out "${OUT%.png}_small.png" >/dev/null; else cp "$OUT" "${OUT%.png}_small.png"; fi

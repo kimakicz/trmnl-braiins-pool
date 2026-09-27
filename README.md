@@ -11,7 +11,10 @@ Data comes from the pool's web API, not from the miner's local API.
 - **Hashrate**: 24h average in TH/s (PH/s from 1,000 TH/s) and worker status. A single worker is shown in words (Online / Offline / Low hashrate), multiple workers with counts, e.g. "3/12 offline · 1 low".
 - **Total mined**: `all_time_reward` from the profile, in sats.
 
-Layouts: `full`, `half_horizontal`, `half_vertical`, `quadrant` (mashups).
+Layouts: `full`, `half_horizontal`, `half_vertical`, `quadrant` (mashups), landscape and portrait.
+
+**Demo mode:** enter `demo` as the API token to see built-in sample data (3 workers, payouts every 3 days, one
+day with a dip in the chart). Dates are relative to the current time, so the demo always looks current.
 
 **Language:** English and Czech, set in the plugin settings (*Language / Jazyk*). `Auto` uses Czech for users with
 locale `cs` and English otherwise. English formats numbers as `1,234` and `1.14`, Czech as `1 234` and `1,14`.
@@ -76,7 +79,7 @@ In the preview, pick the **TRMNL X** model and the **16 Grays** palette (or the 
 Helper scripts:
 
 - `bin/serve`: runs `trmnlp serve` with `TZ=UTC`. TRMNL servers run in UTC and the template shifts dates via `trmnl.user.utc_offset`.
-- `[MODEL=x|og] bin/shot [view] [out.png] [palette]`: screenshot via headless Chrome. `MODEL=x` (default) = TRMNL X (1872×1404, 4-bit), `MODEL=og` = original TRMNL (800×480, 1-bit).
+- `[MODEL=x|og] [ORIENT=landscape|portrait] bin/shot [view] [out.png] [palette]`: screenshot via headless Chrome. `MODEL=x` (default) = TRMNL X (1872×1404, 4-bit), `MODEL=og` = original TRMNL (800×480, 1-bit); `ORIENT=portrait` swaps the dimensions and adds `screen--portrait`.
 - `bin/scenario <name>`: feeds the running server with data from `fixtures/scenarios/` (offline miner, no payouts, failed payout, API outage, multi-worker farm `farm_multi_worker`, large PH/s farm `farm_large`, Limited read-only token `limited_token`…). Back to live data: `bin/scenario --live`.
 
 `fixtures/profile.json`, `fixtures/payouts.json` and `fixtures/rewards.json` are anonymized real API responses.
@@ -96,6 +99,16 @@ the next `push` pulls it back into `settings.yml`, so commit it as well.
 
 Then open the plugin settings in TRMNL, fill in **Braiins Pool API token** and add the plugin to a playlist.
 Data refreshes every 15 minutes (`refresh_interval: 15`); the pool snapshots its statistics every 5 minutes.
+
+### 4. Publishing as a recipe
+
+1. In the plugin settings on TRMNL, set the API token of this instance to `demo`. It becomes the *Recipe Master*,
+   whose screen is shown publicly, so it must not display a real account. Custom field values (tokens) are never
+   copied to people who install the recipe.
+2. Click **Publish as a Recipe**. TRMNL runs the *Chef* linter and then reviews the recipe manually (usually a day or two).
+   *Unlisted* skips the review and gives you a share link right away.
+3. Install the published recipe into your own account like any other user and enter your real token there.
+4. Keep developing on the master: every `trmnlp push` to it is propagated to all installs automatically.
 
 ## Structure
 
@@ -138,9 +151,14 @@ Laděný na TRMNL X, funguje i na původním TRMNL. Data bere z webového API po
    - **Full access** plugin nepotřebuje, nedávej mu víc než read-only.
 2. Přidej plugin v TRMNL a do nastavení vlož **Braiins Pool API token**.
 3. V poli **Language / Jazyk** zvol **Čeština** (nebo `Auto`, které češtinu zvolí podle jazyka účtu).
+   Pro vyzkoušení bez účtu zadej místo tokenu `demo`, plugin pak ukáže ukázková data.
 4. Přidej plugin do playlistu. Data se obnovují každých 15 minut.
 
 **Lokální vývoj:** postup je stejný jako v anglické části výše (`bin/serve`, `bin/shot`, `bin/scenario`, `trmnlp push`).
 Po prvním `trmnlp push` commitni `id`, které se zapíše do `src/settings.yml`.
+
+**Zveřejnění jako recept:** v instanci, ze které recept publikuješ (Recipe Master), nastav token na `demo`, aby
+veřejná ukázka nezobrazovala tvůj účet. Pak klikni na **Publish as a Recipe** a pro vlastní použití si recept
+nainstaluj znovu se svým tokenem. Podrobnosti jsou v anglické části *Publishing as a recipe*.
 
 Logo Braiins je ochranná známka Braiins, plugin s Braiins nijak nesouvisí.
