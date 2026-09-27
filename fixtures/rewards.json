@@ -2,252 +2,242 @@
   "btc": {
     "daily_rewards": [
       {
-        "date": 1790294400,
-        "total_reward": "0.00000053",
-        "mining_reward": "0.00000053",
+        "date": 1790380800,
+        "total_reward": "0.00000048",
+        "mining_reward": "0.00000048",
         "bos_plus_reward": "0.00000000",
         "referral_bonus": "0.00000000",
         "referral_reward": "0.00000000",
-        "shares": 22789120,
+        "shares": 20125541,
+        "share_prices": [
+          {
+            "from_ts": 1790380800,
+            "to_ts": 1790467200,
+            "share_price": "0.000000000000023700000000000000"
+          }
+        ],
+        "calculation_date": 1790474400
+      },
+      {
+        "date": 1790294400,
+        "total_reward": "0.00000046",
+        "mining_reward": "0.00000046",
+        "bos_plus_reward": "0.00000000",
+        "referral_bonus": "0.00000000",
+        "referral_reward": "0.00000000",
+        "shares": 20126286,
         "share_prices": [
           {
             "from_ts": 1790294400,
             "to_ts": 1790380800,
-            "share_price": "0.000000000000023744162681340745"
+            "share_price": "0.000000000000023700000000000000"
           }
         ],
         "calculation_date": 1790388000
       },
       {
         "date": 1790208000,
-        "total_reward": "0.00000054",
-        "mining_reward": "0.00000054",
+        "total_reward": "0.00000050",
+        "mining_reward": "0.00000050",
         "bos_plus_reward": "0.00000000",
         "referral_bonus": "0.00000000",
         "referral_reward": "0.00000000",
-        "shares": 23150592,
+        "shares": 20041291,
         "share_prices": [
           {
             "from_ts": 1790208000,
             "to_ts": 1790294400,
-            "share_price": "0.000000000000023720597123597798"
+            "share_price": "0.000000000000023700000000000000"
           }
         ],
         "calculation_date": 1790301600
       },
       {
         "date": 1790121600,
-        "total_reward": "0.00000053",
-        "mining_reward": "0.00000053",
+        "total_reward": "0.00000046",
+        "mining_reward": "0.00000046",
         "bos_plus_reward": "0.00000000",
         "referral_bonus": "0.00000000",
         "referral_reward": "0.00000000",
-        "shares": 22876160,
+        "shares": 20383730,
         "share_prices": [
           {
             "from_ts": 1790121600,
             "to_ts": 1790208000,
-            "share_price": "0.000000000000023702643194387327"
+            "share_price": "0.000000000000023700000000000000"
           }
         ],
         "calculation_date": 1790215200
       },
       {
         "date": 1790035200,
-        "total_reward": "0.00000053",
-        "mining_reward": "0.00000053",
+        "total_reward": "0.00000049",
+        "mining_reward": "0.00000049",
         "bos_plus_reward": "0.00000000",
         "referral_bonus": "0.00000000",
         "referral_reward": "0.00000000",
-        "shares": 22789120,
+        "shares": 20036287,
         "share_prices": [
           {
             "from_ts": 1790035200,
             "to_ts": 1790121600,
-            "share_price": "0.000000000000023699751786386990"
+            "share_price": "0.000000000000023700000000000000"
           }
         ],
         "calculation_date": 1790128800
       },
       {
         "date": 1789948800,
-        "total_reward": "0.00000053",
-        "mining_reward": "0.00000053",
+        "total_reward": "0.00000050",
+        "mining_reward": "0.00000050",
         "bos_plus_reward": "0.00000000",
         "referral_bonus": "0.00000000",
         "referral_reward": "0.00000000",
-        "shares": 22952960,
+        "shares": 20065934,
         "share_prices": [
           {
             "from_ts": 1789948800,
             "to_ts": 1790035200,
-            "share_price": "0.000000000000023708513791081098"
+            "share_price": "0.000000000000023700000000000000"
           }
         ],
         "calculation_date": 1790042400
       },
       {
         "date": 1789862400,
-        "total_reward": "0.00000054",
-        "mining_reward": "0.00000054",
+        "total_reward": "0.00000047",
+        "mining_reward": "0.00000047",
         "bos_plus_reward": "0.00000000",
         "referral_bonus": "0.00000000",
         "referral_reward": "0.00000000",
-        "shares": 23231488,
+        "shares": 20345899,
         "share_prices": [
           {
             "from_ts": 1789862400,
             "to_ts": 1789948800,
-            "share_price": "0.000000000000023634156952311870"
+            "share_price": "0.000000000000023700000000000000"
           }
         ],
         "calculation_date": 1789956000
       },
       {
         "date": 1789776000,
-        "total_reward": "0.00000054",
-        "mining_reward": "0.00000054",
+        "total_reward": "0.00000049",
+        "mining_reward": "0.00000049",
         "bos_plus_reward": "0.00000000",
         "referral_bonus": "0.00000000",
         "referral_reward": "0.00000000",
-        "shares": 22863872,
+        "shares": 20288255,
         "share_prices": [
           {
             "from_ts": 1789776000,
-            "to_ts": 1789801500,
-            "share_price": "0.000000000000024660021442195114"
-          },
-          {
-            "from_ts": 1789801500,
-            "to_ts": 1789801800,
-            "share_price": "0.000000000000024479317476705076"
-          },
-          {
-            "from_ts": 1789801800,
             "to_ts": 1789862400,
-            "share_price": "0.000000000000023674363448613100"
+            "share_price": "0.000000000000023700000000000000"
           }
         ],
         "calculation_date": 1789869600
       },
       {
         "date": 1789689600,
-        "total_reward": "0.00000055",
-        "mining_reward": "0.00000055",
+        "total_reward": "0.00000047",
+        "mining_reward": "0.00000047",
         "bos_plus_reward": "0.00000000",
         "referral_bonus": "0.00000000",
         "referral_reward": "0.00000000",
-        "shares": 22825984,
+        "shares": 20138966,
         "share_prices": [
           {
             "from_ts": 1789689600,
             "to_ts": 1789776000,
-            "share_price": "0.000000000000024668654314443320"
+            "share_price": "0.000000000000023700000000000000"
           }
         ],
         "calculation_date": 1789783200
       },
       {
         "date": 1789603200,
-        "total_reward": "0.00000055",
-        "mining_reward": "0.00000055",
+        "total_reward": "0.00000050",
+        "mining_reward": "0.00000050",
         "bos_plus_reward": "0.00000000",
         "referral_bonus": "0.00000000",
         "referral_reward": "0.00000000",
-        "shares": 22879232,
+        "shares": 20318029,
         "share_prices": [
           {
             "from_ts": 1789603200,
             "to_ts": 1789689600,
-            "share_price": "0.000000000000024667469616745162"
+            "share_price": "0.000000000000023700000000000000"
           }
         ],
         "calculation_date": 1789696800
       },
       {
         "date": 1789516800,
-        "total_reward": "0.00000056",
-        "mining_reward": "0.00000056",
+        "total_reward": "0.00000049",
+        "mining_reward": "0.00000049",
         "bos_plus_reward": "0.00000000",
         "referral_bonus": "0.00000000",
         "referral_reward": "0.00000000",
-        "shares": 22968320,
+        "shares": 20111043,
         "share_prices": [
           {
             "from_ts": 1789516800,
             "to_ts": 1789603200,
-            "share_price": "0.000000000000024672882978402130"
+            "share_price": "0.000000000000023700000000000000"
           }
         ],
         "calculation_date": 1789610400
       },
       {
         "date": 1789430400,
-        "total_reward": "0.00000055",
-        "mining_reward": "0.00000055",
+        "total_reward": "0.00000050",
+        "mining_reward": "0.00000050",
         "bos_plus_reward": "0.00000000",
         "referral_bonus": "0.00000000",
         "referral_reward": "0.00000000",
-        "shares": 22699008,
+        "shares": 20395976,
         "share_prices": [
           {
             "from_ts": 1789430400,
             "to_ts": 1789516800,
-            "share_price": "0.000000000000024646601142223263"
+            "share_price": "0.000000000000023700000000000000"
           }
         ],
         "calculation_date": 1789524000
       },
       {
         "date": 1789344000,
-        "total_reward": "0.00000056",
-        "mining_reward": "0.00000056",
+        "total_reward": "0.00000047",
+        "mining_reward": "0.00000047",
         "bos_plus_reward": "0.00000000",
         "referral_bonus": "0.00000000",
         "referral_reward": "0.00000000",
-        "shares": 23031808,
+        "shares": 20373790,
         "share_prices": [
           {
             "from_ts": 1789344000,
             "to_ts": 1789430400,
-            "share_price": "0.000000000000024652377056150440"
+            "share_price": "0.000000000000023700000000000000"
           }
         ],
         "calculation_date": 1789437600
       },
       {
         "date": 1789257600,
-        "total_reward": "0.00000056",
-        "mining_reward": "0.00000056",
+        "total_reward": "0.00000048",
+        "mining_reward": "0.00000048",
         "bos_plus_reward": "0.00000000",
         "referral_bonus": "0.00000000",
         "referral_reward": "0.00000000",
-        "shares": 23200768,
+        "shares": 20209186,
         "share_prices": [
           {
             "from_ts": 1789257600,
             "to_ts": 1789344000,
-            "share_price": "0.000000000000024622979296097215"
+            "share_price": "0.000000000000023700000000000000"
           }
         ],
         "calculation_date": 1789351200
-      },
-      {
-        "date": 1789171200,
-        "total_reward": "0.00000055",
-        "mining_reward": "0.00000055",
-        "bos_plus_reward": "0.00000000",
-        "referral_bonus": "0.00000000",
-        "referral_reward": "0.00000000",
-        "shares": 22920192,
-        "share_prices": [
-          {
-            "from_ts": 1789171200,
-            "to_ts": 1789257600,
-            "share_price": "0.000000000000024621897567580886"
-          }
-        ],
-        "calculation_date": 1789264800
       }
     ]
   }

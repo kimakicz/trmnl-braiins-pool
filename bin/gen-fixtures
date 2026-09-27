@@ -1,0 +1,158 @@
+#!/usr/bin/env python3
+"""Generates synthetic sample data in the Braiins Pool API format.
+
+Writes fixtures/profile.json, payouts.json, rewards.json and all scenarios in fixtures/scenarios/.
+No real account data – values are made up but shaped like real API responses.
+Usage: bin/gen-fixtures [YYYY-MM-DD]   (reference "today", default: current UTC date)
+"""
+import copy
+import json
+import random
+import sys
+from datetime import datetime, timezone
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+FIX = ROOT / "fixtures"
+SCN = FIX / "scenarios"
+DAY = 86400
+
+rnd = random.Random(42)  # deterministic output
+if len(sys.argv) > 1:
+    today = datetime.strptime(sys.argv[1], "%Y-%m-%d").replace(tzinfo=timezone.utc)
+else:
+    today = datetime.now(timezone.utc).replace(hour=0, minute=0, second=0, microsecond=0)
+DAY0 = int(today.timestamp())
+
+
+def btc(sats):
+    return "%.8f" % (sats / 1e8)
+
+
+def write(path, data):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n")
+
+
+# --- base data: one home miner, ~1.05 TH/s, ~48 sats/day, Lightning payout every 4 days ---
+profile = {
+    "username": "demo",
+    "btc": {
+        "all_time_reward": btc(12345),
+        "hash_rate_unit": "Gh/s",
+        "hash_rate_5m": 1062.4,
+        "hash_rate_60m": 1048.9,
+        "hash_rate_24h": 1051.3,
+        "hash_rate_yesterday": 1047.8,
+        "low_workers": 0,
+        "off_workers": 0,
+        "ok_workers": 1,
+        "dis_workers": 0,
+        "current_balance": btc(0),
+        "today_reward": btc(21),
+        "estimated_reward": btc(48),
+        "shares_5m": 71680,
+        "shares_60m": 845824,
+        "shares_24h": 20185088,
+        "shares_yesterday": 20119552,
+    },
+}
+
+payouts = {"onchain": [], "lightning": []}
+for k in range(60, -1, -1):  # 61 payouts, oldest first like the API
+    ts = DAY0 - (k * 4 + 1) * DAY + 9 * 3600 + rnd.randint(0, 600)
+    payouts["lightning"].append({
+        "financial_account_name": "Bitcoin Account",
+        "requested_at_ts": ts,
+        "resolved_at_ts": ts + rnd.randint(200, 900),
+        "status": "confirmed",
+        "amount_sats": 190 + rnd.randint(0, 12),
+        "fee_sats": 0,
+        "destination": "user@example.com",
+        "trigger_type": "triggered",
+    })
+
+rewards = {"btc": {"daily_rewards": []}}
+for i in range(1, 15):  # 14 completed days, newest first like the API
+    date = DAY0 - i * DAY
+    sats = 46 + rnd.randint(0, 4)
+    rewards["btc"]["daily_rewards"].append({
+        "date": date,
+        "total_reward": btc(sats),
+        "mining_reward": btc(sats),
+        "bos_plus_reward": btc(0),
+        "referral_bonus": btc(0),
+        "referral_reward": btc(0),
+        "shares": 20000000 + rnd.randint(0, 400000),
+        "share_prices": [{"from_ts": date, "to_ts": date + DAY, "share_price": "0.000000000000023700000000000000"}],
+        "calculation_date": date + DAY + 2 * 3600,
+    })
+
+write(FIX / "profile.json", profile)
+write(FIX / "payouts.json", payouts)
+write(FIX / "rewards.json", rewards)
+
+# --- scenarios (IDX_0 = profile, IDX_1 = payouts, IDX_2 = rewards) ---
+live = {"IDX_0": profile, "IDX_1": payouts, "IDX_2": rewards}
+write(SCN / "live.json", live)
+
+# Th/s unit + last payout failed
+d = copy.deepcopy(live)
+d["IDX_0"]["btc"].update(hash_rate_unit="Th/s", hash_rate_5m=1.2, hash_rate_24h=1.1)
+d["IDX_1"]["lightning"][-1]["status"] = "failed"
+write(SCN / "failed_th_unit.json", d)
+
+# miner offline, dips in the chart, queued on-chain payout newer than the last Lightning one
+d = copy.deepcopy(live)
+d["IDX_0"]["btc"].update(hash_rate_5m=0, hash_rate_24h=312.5, ok_workers=0, off_workers=1,
+                         current_balance=btc(12345), today_reward=btc(0))
+last_ln = d["IDX_1"]["lightning"][-1]["requested_at_ts"]
+d["IDX_1"]["onchain"] = [
+    {"financial_account_name": "Bitcoin Account", "requested_at_ts": last_ln + DAY, "resolved_at_ts": None,
+     "status": "queued", "amount_sats": 1234567, "fee_sats": 1200, "destination": "bc1qexample"},
+    {"financial_account_name": "Bitcoin Account", "requested_at_ts": DAY0 - 300 * DAY, "resolved_at_ts": DAY0 - 300 * DAY + 3600,
+     "status": "confirmed", "amount_sats": 99, "fee_sats": 0, "destination": "bc1qexample"},
+]
+for i, day in enumerate(d["IDX_2"]["btc"]["daily_rewards"]):
+    if i == 0:
+        day["total_reward"] = btc(0)
+    elif i == 1:
+        day["total_reward"] = btc(19)
+    elif i == 5:
+        day["total_reward"] = btc(34)
+write(SCN / "offline_onchain_queued.json", d)
+
+# low hashrate, no payouts, no daily rewards
+d = copy.deepcopy(live)
+d["IDX_0"]["btc"].update(ok_workers=0, low_workers=1, hash_rate_5m=12.3, hash_rate_24h=450.0)
+d["IDX_1"] = {"onchain": [], "lightning": []}
+d["IDX_2"] = {"btc": {"daily_rewards": []}}
+write(SCN / "low_no_payouts.json", d)
+
+# API unavailable
+write(SCN / "no_data.json", {})
+
+# Limited read-only token: payouts endpoint returns 401 → empty object in trmnlp
+d = copy.deepcopy(live)
+d["IDX_1"] = {}
+write(SCN / "limited_token.json", d)
+
+# farm: 12 workers, 3 offline + 1 low, daily on-chain payouts
+farm = copy.deepcopy(live)
+farm["IDX_0"]["btc"].update(hash_rate_5m=287450.3, hash_rate_24h=312876.9, ok_workers=8, low_workers=1, off_workers=3,
+                            today_reward=btc(7834), all_time_reward=btc(4123456), current_balance=btc(31234),
+                            estimated_reward=btc(14400))
+farm["IDX_1"] = {"lightning": [], "onchain": [
+    {"requested_at_ts": DAY0 - (31 - i) * DAY + 9 * 3600, "resolved_at_ts": None, "status": "confirmed",
+     "amount_sats": 14350 + i * 37, "fee_sats": 400} for i in range(31)]}
+for i, day in enumerate(farm["IDX_2"]["btc"]["daily_rewards"]):
+    day["total_reward"] = btc(14300 + (i % 4) * 120)
+write(SCN / "farm_multi_worker.json", farm)
+
+# large farm: 1.52 PH/s, 2 of 42 workers offline, long numbers
+d = copy.deepcopy(farm)
+d["IDX_0"]["btc"].update(hash_rate_24h=1523456.7, today_reward=btc(123456), ok_workers=40, low_workers=0, off_workers=2)
+d["IDX_1"]["onchain"][-1]["amount_sats"] = 1234567
+write(SCN / "farm_large.json", d)
+
+print("fixtures written for reference date", today.date())

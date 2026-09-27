@@ -82,7 +82,8 @@ Helper scripts:
 - `[MODEL=x|og] [ORIENT=landscape|portrait] bin/shot [view] [out.png] [palette]`: screenshot via headless Chrome. `MODEL=x` (default) = TRMNL X (1872×1404, 4-bit), `MODEL=og` = original TRMNL (800×480, 1-bit); `ORIENT=portrait` swaps the dimensions and adds `screen--portrait`.
 - `bin/scenario <name>`: feeds the running server with data from `fixtures/scenarios/` (offline miner, no payouts, failed payout, API outage, multi-worker farm `farm_multi_worker`, large PH/s farm `farm_large`, Limited read-only token `limited_token`…). Back to live data: `bin/scenario --live`.
 
-`fixtures/profile.json`, `fixtures/payouts.json` and `fixtures/rewards.json` are anonymized real API responses.
+`fixtures/` contains synthetic sample data in the real API format (no real account data). Regenerate it with
+`bin/gen-fixtures [YYYY-MM-DD]`, which writes the base files and all scenarios.
 
 ### 3. Upload to TRMNL
 
@@ -122,7 +123,7 @@ src/
   quadrant.liquid
 .trmnlp.yml             # local trmnlp config (token from env, time_zone)
 fixtures/               # sample data + scenarios
-bin/                    # serve / shot / scenario
+bin/                    # serve / shot / scenario / gen-fixtures
 ```
 
 ## Logo
