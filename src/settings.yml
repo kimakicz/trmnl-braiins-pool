@@ -50,10 +50,10 @@ custom_fields:
   name: Language / Jazyk
   description: Auto = Czech for Czech locale, English otherwise
   options:
-  - Auto
-  - English
-  - Čeština
-  default: Auto
+  - Auto: auto
+  - English: en
+  - Čeština: cs
+  default: auto
   optional: true
 name: Braiins Miner
 description: Braiins Pool hashrate and payouts

@@ -6,5 +6,5 @@ watch:
 time_zone: Europe/Prague
 custom_fields:
   pool_token: "{{ env.BRAIINS_POOL_TOKEN }}"
-  # preview language: Auto (by trmnl.user.locale, "en" locally) / English / Čeština
-  # language: "Čeština"
+  # preview language: auto (by trmnl.user.locale, "en" locally) / en / cs
+  # language: cs

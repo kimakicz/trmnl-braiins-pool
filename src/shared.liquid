@@ -4,12 +4,16 @@
 {%- endcomment -%}
 
 {%- comment -%}
-  Language: custom field `language` (Auto / English / Čeština); Auto = Czech for locale cs, English otherwise.
+  Language: custom field `language` (auto / en / cs); auto = Czech for locale cs, English otherwise.
 {%- endcomment -%}
-{%- assign lang_pref = trmnl.plugin_settings.custom_fields_values.language | default: "Auto" -%}
+{%- comment -%}
+  Select values: TRMNL stores the option value ("en" / "cs"); older plain-string options were stored
+  parameterized ("english" / "cestina"), trmnlp keeps labels as-is. Accept all of them.
+{%- endcomment -%}
+{%- assign lang_pref = trmnl.plugin_settings.custom_fields_values.language | default: "auto" | strip | downcase -%}
 {%- assign user_locale = trmnl.user.locale | default: "en" | downcase | slice: 0, 2 -%}
-{%- if lang_pref == "Čeština" -%}{%- assign lang = "cs" -%}
-{%- elsif lang_pref == "English" -%}{%- assign lang = "en" -%}
+{%- if lang_pref == "cs" or lang_pref == "cestina" or lang_pref == "čeština" -%}{%- assign lang = "cs" -%}
+{%- elsif lang_pref == "en" or lang_pref == "english" -%}{%- assign lang = "en" -%}
 {%- elsif user_locale == "cs" -%}{%- assign lang = "cs" -%}
 {%- else -%}{%- assign lang = "en" -%}
 {%- endif -%}
