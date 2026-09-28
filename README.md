@@ -15,6 +15,8 @@ Layouts: `full`, `half_horizontal`, `half_vertical`, `quadrant` (mashups), lands
 
 **Demo mode:** enter `demo` as the API token to see built-in sample data (3 workers, payouts every 3 days, one
 day with a dip in the chart). Dates are relative to the current time, so the demo always looks current.
+In demo mode the plugin does not call Braiins Pool at all: the polling URL switches to TRMNL's example data endpoint
+(`https://trmnl.com/custom_plugin_example_data.json`), so the pool never returns an error and TRMNL does not pause the plugin.
 
 **Language:** English and Czech, set in the plugin settings (*Language / Jazyk*). `Auto` uses Czech for users with
 locale `cs` and English otherwise. English formats numbers as `1,234` and `1.14`, Czech as `1 234` and `1,14`.
